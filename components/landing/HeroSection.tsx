@@ -2,10 +2,10 @@ export default function HeroSection() {
   return (
     <div className="">
       <div className="mb-6 px-3 border py-1 w-fit rounded-full bg-[#F9FAFB]">
-        <p className="text-sm text-gray-700 tracking-tight">Over <span className="font-semibold text-black italic">$4.6 Billion</span> in deals closed on Parcl</p>
+        <p className="text-sm text-gray-700 tracking-tight">Over <span className="font-semibold text-black italic">$4.6 Billion</span> in deals closed on Cirkle</p>
       </div>
       
-      <h1 className="text-xl lg:text-[45px] font-semibold lg:w-[500px] text-gray-900 mb-6 leading-tight">
+      <h1 className="text-xl lg:text-[45px] font-semibold lg:w-[500px] text-gray-900 mb-6 leading-tight tracking-tight">
         Faster, simpler, smarter, real estate.
       </h1>
       

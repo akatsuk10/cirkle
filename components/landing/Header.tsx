@@ -42,7 +42,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <div className="text-2xl font-semibold tracking-tight text-gray-900">
-              Cerkle
+              Cirkle
             </div>
             <div className="hidden md:flex items-center space-x-6">
               {["Solutions", "Enterprise", "Developer", "Resources", "Pricing"].map((item) => (
@@ -68,7 +68,7 @@ export default function Header() {
                 ? `${publicKey?.toBase58().slice(0, 4)}...${publicKey
                     ?.toBase58()
                     .slice(-4)}`
-                : "Connect Wallet"}
+                : "Get Started"}
             </button>
 
             {connected && menuOpen && (

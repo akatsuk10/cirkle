@@ -1,11 +1,37 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SolanaWalletProvider } from "@/lib/SolanaProvider";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
+const helvetica = localFont({
+  src: [
+    {
+      path: "./fonts/helvetica-light-587ebe5a59211.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "./fonts/helvetica.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/helvetica-oblique.ttf",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "./fonts/helvetica-bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/Helvetica-BoldOblique.ttf",
+      weight: "700",
+      style: "italic",
+    },
+  ],
+  variable: "--font-helvetica",
 });
 
 export const metadata: Metadata = {
@@ -19,9 +45,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${manrope.variable} antialiased`}
+        className={`${helvetica.variable} antialiased font-helvetica`}
       >
         <SolanaWalletProvider>
           {children}

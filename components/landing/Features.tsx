@@ -10,10 +10,10 @@ export default function Features() {
         <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
         <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 items-stretch">
           {/* Individuals - Free */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col">
-            <div className="h-48">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
+            <div className="flex-1">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Individuals</h3>
                 <div className="mb-4">
@@ -24,7 +24,7 @@ export default function Features() {
             </div>
             
             <div className="mt-auto">
-              <button className="w-full bg-gray-900 text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors mb-6">
+              <button className="w-full bg-[#065F46] text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-[#065F46]/80 transition-colors mb-6">
                 Get started →
               </button>
               
@@ -51,12 +51,12 @@ export default function Features() {
           </div>
 
           {/* Teams - $15 (Featured) */}
-          <div className="bg-gray-900 text-white border border-gray-900 rounded-2xl p-6 relative flex flex-col">
+          <div className="bg-gray-900 text-white border border-gray-900 rounded-2xl p-6 relative flex flex-col h-full">
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-gray-700 text-white text-xs px-3 py-1 rounded-full">14 day free trial</span>
+              <span className="bg-[#065F46] text-white text-xs px-3 py-1 rounded-full">14 day free trial</span>
             </div>
             
-            <div className="h-48">
+            <div className="flex-1">
               <div className="mb-6 pt-4">
                 <h3 className="text-lg font-semibold mb-2">Teams</h3>
                 <div className="mb-1">
@@ -71,7 +71,7 @@ export default function Features() {
             </div>
             
             <div className="mt-auto">
-              <button className="w-full bg-white text-gray-900 py-3 px-4 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors mb-6">
+              <button className="w-full bg-[#065F46] text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-[#065F46]/80 transition-colors mb-6">
                 Get started →
               </button>
               
@@ -98,8 +98,8 @@ export default function Features() {
           </div>
 
           {/* Organizations - $37 */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col">
-            <div className="h-48">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
+            <div className="flex-1">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Organizations</h3>
                 <div className="mb-1">
@@ -114,7 +114,7 @@ export default function Features() {
             </div>
             
             <div className="mt-auto">
-              <button className="w-full bg-gray-900 text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors mb-6">
+              <button className="w-full bg-[#065F46] text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-[#065F46]/80 transition-colors mb-6">
                 Get started →
               </button>
               
@@ -141,8 +141,8 @@ export default function Features() {
           </div>
 
           {/* Enterprise - Contact us */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col">
-            <div className="h-48">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
+            <div className="flex-1">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Enterprise</h3>
                 <div className="mb-4">
@@ -153,7 +153,7 @@ export default function Features() {
             </div>
             
             <div className="mt-auto">
-              <button className="w-full bg-gray-900 text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors mb-6">
+              <button className="w-full bg-[#065F46] text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-[#065F46]/80 transition-colors mb-6">
                 Get a Quote →
               </button>
               
