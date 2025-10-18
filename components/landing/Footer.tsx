@@ -1,12 +1,12 @@
 export default function Footer() {
     return (
         <footer className="">
-            <div className="max-w-6xl mx-auto pb-12">
+            <div className="max-w-6xl mx-auto pb-12 px-4 md:px-6">
                 <div className="flex flex-col md:flex-row justify-between items-start">
                     {/* Brand Section */}
                     <div className="mb-8 md:mb-4">
                         <div className="mb-2">
-                            <h3 className="text-4xl font-bold text-gray-900">
+                            <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
                                 Cirkle
                             </h3>
                         </div>
@@ -91,22 +91,24 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Section */}
-                <div className=" border-gray-200 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div className="border-gray-200 mt-12 pt-8 flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                     {/* Status Indicator */}
                     <div className="flex items-center space-x-2 border w-fit px-2 py-1 rounded-lg bg-white">
                         <div className="w-2.5 h-2.5 bg-yellow-200 border rounded-full shadow-xs"></div>
                         <span className="text-sm text-gray-600">All systems operational</span>
                     </div>
-                    <div className="flex space-x-6">
-                        <p className="text-sm text-gray-500 mb-4 md:mb-0">
+                    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6">
+                        <p className="text-sm text-gray-500">
                             © 2025 Cirkle. All rights reserved
                         </p>
-                        <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                            Privacy Policy
-                        </a>
-                        <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                            Terms of Use
-                        </a>
+                        <div className="flex space-x-4">
+                            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                                Privacy Policy
+                            </a>
+                            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                                Terms of Use
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

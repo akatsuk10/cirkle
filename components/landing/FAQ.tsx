@@ -48,9 +48,9 @@ export default function FAQ() {
         <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
         <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
 
-        <div className="px-4">
+        <div className="px-4 md:px-6">
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 md:mb-12">
             <h2 className="text-3xl font-semibold text-gray-900 mb-4">
               Frequently Asked Questions
             </h2>
@@ -65,7 +65,7 @@ export default function FAQ() {
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq) => (
                 <AccordionItem key={faq.id} value={faq.id} className="border-gray-200 py-2">
-                  <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-[#065F46] transition-colors">
+                  <AccordionTrigger className="text-left text-gray-900 hover:text-[#065F46] transition-colors">
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className="text-gray-600 leading-relaxed">

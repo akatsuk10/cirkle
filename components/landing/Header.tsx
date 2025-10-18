@@ -31,12 +31,12 @@ export default function Header() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-6 transition-all duration-300">
+    <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 md:py-6 transition-all duration-300">
       <div
         className={`max-w-6xl mx-auto transition-all duration-300 ${
           isScrolled
-            ? "bg-white/90 backdrop-blur-md border rounded-2xl px-6 py-3"
-            : "px-6 py-3 rounded-2xl"
+            ? "bg-white/90 backdrop-blur-md border rounded-2xl px-4 md:px-6 py-3"
+            : "px-4 md:px-6 py-3 rounded-2xl"
         }`}
       >
         <div className="flex items-center justify-between">
