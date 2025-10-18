@@ -1,17 +1,15 @@
-import Header from "../components/Header";
-import MainContent from "../components/MainContent";
-import TrustedBy from "../components/TrustedBy";
-import Features from "../components/Features";
+"use client";
+
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import LandingPage from "@/components/LandingPage";
+import HomePage from "@/components/HomePage";
 
 export default function Home() {
+  const wallet = useAnchorWallet();
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-      <MainContent />
-      <TrustedBy />
-      <Features />
-      {/* Footer spacer */}
-      <div className="h-96"></div>
+      {wallet ? <HomePage /> : <LandingPage />}
     </div>
   );
 }
