@@ -253,6 +253,10 @@ export type CirkleContract = {
         {
           "name": "solPriceUsd",
           "type": "u64"
+        },
+        {
+          "name": "metadataUri",
+          "type": "string"
         }
       ]
     },
@@ -703,6 +707,10 @@ export type CirkleContract = {
           {
             "name": "bump",
             "type": "u8"
+          },
+          {
+            "name": "metadataUri",
+            "type": "string"
           }
         ]
       }

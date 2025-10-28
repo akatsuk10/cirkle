@@ -247,6 +247,10 @@
         {
           "name": "sol_price_usd",
           "type": "u64"
+        },
+        {
+          "name": "metadata_uri",
+          "type": "string"
         }
       ]
     },
@@ -697,6 +701,10 @@
           {
             "name": "bump",
             "type": "u8"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "string"
           }
         ]
       }
