@@ -212,9 +212,12 @@ export default function CityPage() {
       return;
     }
 
-    if (amount > userSolBalance) {
+    const TX_FEE_BUFFER = 0.001;
+    const availableBalance = userSolBalance - TX_FEE_BUFFER;
+
+    if (amount > availableBalance) {
       toast.error("Insufficient balance", {
-        description: `You have ${userSolBalance.toFixed(4)} SOL but trying to spend ${amount} SOL`
+        description: `You have ${userSolBalance.toFixed(4)} SOL. Need ${TX_FEE_BUFFER} SOL for fees. Available: ${availableBalance.toFixed(4)} SOL`
       });
       return;
     }
