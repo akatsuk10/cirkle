@@ -9,16 +9,16 @@ import { CirkleContract } from "./idl/cirkle_contract";
 const adminKey = process.env.NEXT_PUBLIC_ADMIN_PUBLICKEY!;
 const adminPubkey = new PublicKey(adminKey);
 
-
 export const initVault = async (
   program: Program<CirkleContract> | undefined,
   walletPubkey: PublicKey
 ) => {
-  if (!program || !walletPubkey) throw new Error("Program or wallet not connected");
+  if (!program || !walletPubkey)
+    throw new Error("Program or wallet not connected");
   try {
     // Derive PDA
     const [vaultPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from("protocol_admin"),adminPubkey.toBuffer()],
+      [Buffer.from("protocol_admin"), adminPubkey.toBuffer()],
       program.programId
     );
 
