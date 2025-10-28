@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { getCityList } from "@/utils/solana/oracle/getCityList";
 import { useOracleProgram } from "@/utils/oracle";
@@ -19,9 +20,9 @@ export default function HomePage() {
     const [cities, setCities] = useState<CityInfo[]>([]);
     const [loading, setLoading] = useState(false);
     const { oracleProgram } = useOracleProgram();
-
     const wallet = useAnchorWallet();
-    const hasFetched = useRef(false); 
+    const router = useRouter();
+    const hasFetched = useRef(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,9 +43,15 @@ export default function HomePage() {
         fetchData();
     }, [wallet, oracleProgram]);
 
+    const handleClick = (cityName: string) => {
+        const slug = cityName.replace(/\s+/g, "-");
+        router.push(`/city/${slug}`);
+    };
+
+
     return (
         <div className="min-h-screen bg-neutral-950 text-white flex flex-col items-center py-10 px-4">
-            <Header/>
+            <Header />
             <h1 className="text-3xl font-bold mb-8 text-center">🏙 Circle Rate Dashboard</h1>
 
             {loading ? (
@@ -57,7 +64,8 @@ export default function HomePage() {
                     {cities.map((city) => (
                         <div
                             key={city.cityName}
-                            className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 hover:border-neutral-600 transition"
+                            className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 hover:border-neutral-600 transition cursor-pointer"
+                            onClick={() => handleClick(city.cityName)}
                         >
                             <h2 className="text-xl font-semibold mb-2">{city.cityName}</h2>
                             <p className="text-sm text-gray-400 mb-1">Country: {city.country}</p>

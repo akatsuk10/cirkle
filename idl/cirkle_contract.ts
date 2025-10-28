@@ -33,8 +33,7 @@ export type CirkleContract = {
         },
         {
           "name": "admin",
-          "writable": true,
-          "signer": true
+          "writable": true
         },
         {
           "name": "vault",
@@ -69,6 +68,41 @@ export type CirkleContract = {
         },
         {
           "name": "cityConfig",
+          "docs": [
+            "City configuration - stores metadata about the city's token"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  121,
+                  45,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "cityName"
+              }
+            ]
+          }
+        },
+        {
+          "name": "cityMint",
+          "docs": [
+            "City-specific mint - unique for each city",
+            "This gets created on the FIRST buy for this city"
+          ],
           "writable": true,
           "pda": {
             "seeds": [
@@ -94,11 +128,10 @@ export type CirkleContract = {
           }
         },
         {
-          "name": "mint",
-          "writable": true
-        },
-        {
           "name": "userAta",
+          "docs": [
+            "User's Associated Token Account for this specific city token"
+          ],
           "writable": true,
           "pda": {
             "seeds": [
@@ -145,7 +178,7 @@ export type CirkleContract = {
               },
               {
                 "kind": "account",
-                "path": "mint"
+                "path": "cityMint"
               }
             ],
             "program": {
@@ -198,6 +231,10 @@ export type CirkleContract = {
         {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
         }
       ],
       "args": [
@@ -211,6 +248,10 @@ export type CirkleContract = {
         },
         {
           "name": "solAmount",
+          "type": "u64"
+        },
+        {
+          "name": "solPriceUsd",
           "type": "u64"
         }
       ]
@@ -235,8 +276,7 @@ export type CirkleContract = {
         },
         {
           "name": "admin",
-          "writable": true,
-          "signer": true
+          "writable": true
         },
         {
           "name": "vault",
@@ -271,6 +311,41 @@ export type CirkleContract = {
         },
         {
           "name": "cityConfig",
+          "docs": [
+            "City configuration - stores metadata about the city's token"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  121,
+                  45,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "cityName"
+              }
+            ]
+          }
+        },
+        {
+          "name": "cityMint",
+          "docs": [
+            "City-specific mint - unique for each city"
+          ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -295,11 +370,10 @@ export type CirkleContract = {
           }
         },
         {
-          "name": "mint",
-          "writable": true
-        },
-        {
           "name": "userAta",
+          "docs": [
+            "User's Associated Token Account for this specific city token"
+          ],
           "writable": true,
           "pda": {
             "seeds": [
@@ -346,7 +420,7 @@ export type CirkleContract = {
               },
               {
                 "kind": "account",
-                "path": "mint"
+                "path": "cityMint"
               }
             ],
             "program": {
@@ -399,7 +473,15 @@ export type CirkleContract = {
       ],
       "args": [
         {
+          "name": "cityName",
+          "type": "string"
+        },
+        {
           "name": "circleRate",
+          "type": "u64"
+        },
+        {
+          "name": "solPriceUsd",
           "type": "u64"
         },
         {
@@ -593,6 +675,11 @@ export type CirkleContract = {
       "code": 6006,
       "name": "invalidMint",
       "msg": "Invalid Mint"
+    },
+    {
+      "code": 6007,
+      "name": "invalidAmount",
+      "msg": "Invalid Amount"
     }
   ],
   "types": [
@@ -608,6 +695,10 @@ export type CirkleContract = {
           {
             "name": "mint",
             "type": "pubkey"
+          },
+          {
+            "name": "totalSupply",
+            "type": "u64"
           },
           {
             "name": "bump",

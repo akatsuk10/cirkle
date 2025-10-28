@@ -12,7 +12,7 @@ import {
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 export function SolanaWalletProvider({ children }: { children: React.ReactNode }) {
-  const endpoint = "https://devnet.helius-rpc.com/?api-key=ddb0234e-0765-42fa-88e8-41825d43dbdd";
+  const endpoint = `https://devnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API}`;
 
   const wallets = useMemo(
     () => [
