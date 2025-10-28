@@ -218,9 +218,14 @@ export default function CityPage() {
       console.log("✅ Sell success:", tx);
       setTransactionError(null);
       setSellAmount("1");
-      alert(
-        `Successfully sold tokens!\n\nTransaction: ${tx}\n\nView on Explorer: https://explorer.solana.com/tx/${tx}?cluster=devnet`
-      );
+
+      if (tx === "Success") {
+        alert(`Successfully sold tokens!\n\nTransaction was already processed on-chain.`);
+      } else {
+        alert(
+          `Successfully sold tokens!\n\nTransaction: ${tx}\n\nView on Explorer: https://explorer.solana.com/tx/${tx}?cluster=devnet`
+        );
+      }
 
       setTimeout(() => window.location.reload(), 2000);
     } catch (err) {

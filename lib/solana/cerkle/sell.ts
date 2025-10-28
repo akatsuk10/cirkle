@@ -59,8 +59,14 @@ export async function sellToken(
 
     console.log("Sell transaction success:", tx);
     return tx;
-  } catch (err) {
+  } catch (err: any) {
     console.error("Failed to sell token:", err);
+
+    if (err.message && err.message.includes("already been processed")) {
+      console.log("✅ Transaction already processed successfully!");
+      return "Success";
+    }
+
     throw err;
   }
 }
