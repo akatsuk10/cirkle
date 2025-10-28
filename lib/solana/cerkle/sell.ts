@@ -13,7 +13,8 @@ export async function sellToken(
   tokenAmount: number,
   mint: PublicKey | undefined,
   userAta: PublicKey | undefined,
-  cityConfig: PublicKey
+  cityConfig: PublicKey,
+  solPriceUsd: number = 200
 ) {
   if (!mint || !userAta) {
     throw new Error(
@@ -39,15 +40,20 @@ export async function sellToken(
     });
 
     const tx = await program.methods
-      .sell(new BN(circleRate), new BN(tokenAmount))
+      .sell(
+        cityName,
+        new BN(circleRate),
+        new BN(solPriceUsd),
+        new BN(tokenAmount * 1_000_000)
+      )
       .accountsPartial({
         user: userPubkey,
+        admin: adminPubkey,
         vault: vaultPda,
         cityConfig,
-        mint,
+        cityMint: mint,
         userAta,
         tokenProgram: TOKEN_PROGRAM_ID,
-        systemProgram: SystemProgram.programId,
       })
       .rpc();
 

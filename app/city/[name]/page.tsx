@@ -35,6 +35,7 @@ export default function CityPage() {
   const [txLoading, setTxLoading] = useState(false);
   const [solAmount, setSolAmount] = useState<string>("1");
   const [sellAmount, setSellAmount] = useState<string>("1");
+  const [userTokenBalance, setUserTokenBalance] = useState<number>(0);
 
   useEffect(() => {
     const fetchCity = async () => {
@@ -72,29 +73,57 @@ export default function CityPage() {
   const getMintAndCityConfig = async () => {
     if (!publicKey || !program || !city) return;
 
-    const [cityConfigPda] = PublicKey.findProgramAddressSync(
+    // Derive mint PDA from city name
+    const [cityMintPda] = PublicKey.findProgramAddressSync(
       [Buffer.from("city-mint"), Buffer.from(city.cityName)],
       program.programId
     );
 
-    const cityConfig = await program.account.cityConfig.fetchNullable(
-      cityConfigPda
+    // Derive city config PDA
+    const [cityConfigPda] = PublicKey.findProgramAddressSync(
+      [Buffer.from("city-config"), Buffer.from(city.cityName)],
+      program.programId
     );
 
-    let mint: PublicKey | undefined;
-    if (!cityConfig || cityConfig.mint.equals(PublicKey.default)) {
-      mint = undefined;
-    } else {
-      mint = cityConfig.mint;
-    }
+    // Get user's ATA for this mint
+    const userAta = await getAssociatedTokenAddress(cityMintPda, publicKey);
 
-    let userAta: PublicKey | undefined;
-    if (mint) {
-      userAta = await getAssociatedTokenAddress(mint, publicKey);
-    }
-
-    return { mint, cityConfigPda, userAta };
+    return { mint: cityMintPda, cityConfigPda, userAta };
   };
+
+  const fetchTokenBalance = async () => {
+    try {
+      if (!publicKey || !program || !city || !connection) {
+        setUserTokenBalance(0);
+        return;
+      }
+
+      // Derive mint PDA from city name
+      const [cityMintPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("city-mint"), Buffer.from(city.cityName)],
+        program.programId
+      );
+
+      // Get user's ATA for this mint
+      const userAta = await getAssociatedTokenAddress(cityMintPda, publicKey);
+
+      // Fetch token balance
+      const tokenAccount = await connection.getTokenAccountBalance(userAta);
+      const balance = tokenAccount.value.uiAmount || 0;
+      setUserTokenBalance(balance);
+    } catch (err) {
+      // Account might not exist yet if no tokens purchased
+      setUserTokenBalance(0);
+    }
+  };
+
+  useEffect(() => {
+    if (city && publicKey && program) {
+      fetchTokenBalance();
+      const interval = setInterval(fetchTokenBalance, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [city, publicKey, program, connection]);
 
   const handleBuy = async () => {
     if (!city || !program || !publicKey || !solAmount || !sendTransaction)
@@ -158,6 +187,7 @@ export default function CityPage() {
     setTxLoading(true);
     setTransactionError(null);
     try {
+      const solPriceUsd = 200;
       const amount = parseFloat(sellAmount);
 
       if (isNaN(amount) || amount <= 0) {
@@ -181,7 +211,8 @@ export default function CityPage() {
         amount,
         mint,
         userAta,
-        cityConfigPda
+        cityConfigPda,
+        solPriceUsd
       );
 
       console.log("✅ Sell success:", tx);
@@ -404,7 +435,7 @@ export default function CityPage() {
                   placeholder="1"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
-                <p className="text-xs text-gray-500 mt-1">You own: 0 tokens</p>
+                <p className="text-xs text-gray-500 mt-1">You own: {userTokenBalance.toFixed(6)} tokens</p>
               </div>
 
               <button
