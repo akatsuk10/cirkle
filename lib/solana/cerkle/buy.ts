@@ -148,17 +148,28 @@ export async function buyToken(
       }
     }
 
-    console.log("Final image URL for contract:", finalImageUrl);
+    console.log("Final metadata URI for contract:", finalImageUrl);
     console.log(
-      `Image URL length: ${finalImageUrl.length} characters (max: 128)`
+      `Metadata URI length: ${finalImageUrl.length} characters (max: 256)`
     );
 
-    if (finalImageUrl.length > 128) {
-      console.error(`Image URL too long: ${finalImageUrl.length} > 128`);
+    if (finalImageUrl.length > 256) {
+      console.error(`Metadata URI too long: ${finalImageUrl.length} > 256`);
       throw new Error(
-        `Image URL exceeds 128 character limit (${finalImageUrl.length} chars)`
+        `Metadata URI exceeds 256 character limit (${finalImageUrl.length} chars)`
       );
     }
+
+    const METAPLEX_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
+
+    const [metadataPda] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("metadata"),
+        METAPLEX_PROGRAM_ID.toBuffer(),
+        cityMintPda.toBuffer(),
+      ],
+      METAPLEX_PROGRAM_ID
+    );
 
     console.log("Creating buy instruction with params:", {
       cityName,
@@ -166,6 +177,7 @@ export async function buyToken(
       circleRate,
       solPriceUsd,
       imageUrlLength: finalImageUrl.length,
+      metadataPda: metadataPda.toString(),
     });
 
     let buyIx;
@@ -189,6 +201,8 @@ export async function buyToken(
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
           systemProgram: SystemProgram.programId,
           rent: SYSVAR_RENT_PUBKEY,
+          metadata: metadataPda,
+          tokenMetadataProgram: METAPLEX_PROGRAM_ID,
         })
         .instruction();
       console.log("Buy instruction created");

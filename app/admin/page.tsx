@@ -147,11 +147,9 @@ export default function AdminPage() {
     );
   }
 
-  // Admin view
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Admin Status */}
         <div className="mb-8 p-6 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-center space-x-3">
             <CheckCircle className="w-6 h-6 text-green-600" />
@@ -165,7 +163,6 @@ export default function AdminPage() {
             </div>
           </div>
         </div>
-        {/* Error/Success Messages */}
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
             <p>{error}</p>
@@ -178,7 +175,6 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Initialize Vault */}
         {!isVerified ? (
           <div className="p-6 bg-blue-50 border border-blue-200 rounded-lg">
             <h2 className="text-2xl font-bold mb-4 text-blue-900">

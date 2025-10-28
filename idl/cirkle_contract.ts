@@ -235,6 +235,14 @@ export type CirkleContract = {
         {
           "name": "rent",
           "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "metadata",
+          "writable": true
+        },
+        {
+          "name": "tokenMetadataProgram",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
         }
       ],
       "args": [

@@ -104,13 +104,15 @@ export async function POST(request: NextRequest) {
     }
 
     const imageUri = `ipfs://${ipfsHash}`;
+    const imageGatewayUrl = `https://${PINATA_GATEWAY}/ipfs/${ipfsHash}`;
     console.log(`[IPFS] Image uploaded: ${imageUri}`);
+    console.log(`[IPFS] Image gateway URL: ${imageGatewayUrl}`);
 
     console.log("[IPFS] Creating metadata JSON...");
     const metadata = {
       name: cityName,
       description: `${cityName} City Token - Real Estate Tokenization`,
-      image: imageUri,
+      image: imageGatewayUrl,
       attributes: [
         {
           trait_type: "City",
