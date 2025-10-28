@@ -15,7 +15,6 @@ export const initVault = async (
   if (!program || !walletPubkey)
     throw new Error("Program or wallet not connected");
   try {
-    // Derive PDA
     const [vaultPda] = PublicKey.findProgramAddressSync(
       [Buffer.from("protocol_admin"), adminPubkey.toBuffer()],
       program.programId
@@ -23,7 +22,6 @@ export const initVault = async (
 
     console.log("Vault PDA:", vaultPda.toBase58());
 
-    // Send transaction
     const txSig = await program.methods
       .vaultInitialize()
       .accountsPartial({
