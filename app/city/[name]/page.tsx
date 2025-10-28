@@ -29,14 +29,14 @@ export default function CityPage() {
   const [city, setCity] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [transactionError, setTransactionError] = useState<string | null>(null);
   const { oracleProgram } = useOracleProgram();
   const { program } = useProgram();
   const { publicKey, sendTransaction } = useWallet();
   const hasFetched = useRef(false);
   const lastAttemptedCityRef = useRef<string | null>(null);
   const lastFetchedBalancesCityRef = useRef<string | null>(null);
-  const [txLoading, setTxLoading] = useState(false);
+  const [buyLoading, setBuyLoading] = useState(false);
+  const [sellLoading, setSellLoading] = useState(false);
   const [solAmount, setSolAmount] = useState<string>("1");
   const [sellAmount, setSellAmount] = useState<string>("1");
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0);
@@ -204,17 +204,25 @@ export default function CityPage() {
   const handleBuy = async () => {
     if (!city || !program || !publicKey || !solAmount || !sendTransaction)
       return;
-    setTxLoading(true);
-    setTransactionError(null);
+
+    const amount = parseFloat(solAmount);
+
+    if (isNaN(amount) || amount <= 0) {
+      toast.error("Invalid amount", { description: "Please enter a valid SOL amount" });
+      return;
+    }
+
+    if (amount > userSolBalance) {
+      toast.error("Insufficient balance", {
+        description: `You have ${userSolBalance.toFixed(4)} SOL but trying to spend ${amount} SOL`
+      });
+      return;
+    }
+
+    setBuyLoading(true);
 
     try {
       const solPriceUsd = 200;
-      const amount = parseFloat(solAmount);
-
-      if (isNaN(amount) || amount <= 0) {
-        setTransactionError("Please enter a valid SOL amount");
-        return;
-      }
 
       console.log("Starting buy transaction:", {
         cityName: city.cityName,
@@ -236,7 +244,6 @@ export default function CityPage() {
       );
 
       console.log("Buy success:", tx);
-      setTransactionError(null);
       setSolAmount("1");
       toast.success("Successfully bought tokens!", {
         description: `View on Explorer: https://explorer.solana.com/tx/${tx}?cluster=devnet`,
@@ -253,29 +260,38 @@ export default function CityPage() {
       if (err.logs) {
         console.log("Full error logs:", err.logs);
       }
-      setTransactionError(errorMessage);
       toast.error("Buy failed", { description: errorMessage });
     } finally {
-      setTxLoading(false);
+      setBuyLoading(false);
     }
   };
 
   const handleSell = async () => {
     if (!city || !program || !publicKey || !sellAmount) return;
-    setTxLoading(true);
-    setTransactionError(null);
+
+    const amount = parseFloat(sellAmount);
+
+    if (isNaN(amount) || amount <= 0) {
+      toast.error("Invalid amount", { description: "Please enter a valid token amount" });
+      return;
+    }
+
+    if (amount > userTokenBalance) {
+      toast.error("Insufficient token balance", {
+        description: `You have ${userTokenBalance.toFixed(6)} tokens but trying to sell ${amount} tokens`
+      });
+      return;
+    }
+
+    setSellLoading(true);
+
     try {
       const solPriceUsd = 200;
-      const amount = parseFloat(sellAmount);
-
-      if (isNaN(amount) || amount <= 0) {
-        setTransactionError("Please enter a valid token amount");
-        return;
-      }
 
       const result = await getMintAndCityConfig();
       if (!result) {
-        setTransactionError("Unable to fetch city configuration");
+        toast.error("Configuration error", { description: "Unable to fetch city configuration" });
+        setSellLoading(false);
         return;
       }
 
@@ -294,7 +310,6 @@ export default function CityPage() {
       );
 
       console.log("Sell success:", tx);
-      setTransactionError(null);
       setSellAmount("1");
 
       if (tx === "Success") {
@@ -316,10 +331,9 @@ export default function CityPage() {
       if (err instanceof Error) {
         errorMessage = err.message;
       }
-      setTransactionError(errorMessage);
       toast.error("Sell failed", { description: errorMessage });
     } finally {
-      setTxLoading(false);
+      setSellLoading(false);
     }
   };
 
@@ -514,18 +528,12 @@ export default function CityPage() {
 
               <button
                 onClick={handleBuy}
-                disabled={txLoading || !solAmount}
+                disabled={buyLoading || sellLoading || !solAmount}
                 className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center space-x-2"
               >
-                {txLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                <span>{txLoading ? "Processing..." : "Buy Tokens"}</span>
+                {buyLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                <span>{buyLoading ? "Processing..." : "Buy Tokens"}</span>
               </button>
-
-              {transactionError && (
-                <div className="bg-red-50 border border-red-200 text-red-700 text-xs p-3 rounded">
-                  {transactionError}
-                </div>
-              )}
             </div>
           </div>
 
@@ -572,18 +580,12 @@ export default function CityPage() {
 
               <button
                 onClick={handleSell}
-                disabled={txLoading || !sellAmount}
+                disabled={sellLoading || buyLoading || !sellAmount}
                 className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center space-x-2"
               >
-                {txLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                <span>{txLoading ? "Processing..." : "Sell Tokens"}</span>
+                {sellLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                <span>{sellLoading ? "Processing..." : "Sell Tokens"}</span>
               </button>
-
-              {transactionError && (
-                <div className="bg-red-50 border border-red-200 text-red-700 text-xs p-3 rounded">
-                  {transactionError}
-                </div>
-              )}
             </div>
           </div>
         </div>
