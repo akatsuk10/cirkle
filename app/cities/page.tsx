@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { Loader2, ArrowRight } from "lucide-react";
 import { getCityList } from "@/utils/solana/oracle/getCityList";
 import { useOracleProgram } from "@/utils/oracle";
 import Header from "@/components/landing/Header";
+import { useAnchorWallet } from "@solana/wallet-adapter-react";
 
 interface CityInfo {
   cityName: string;
@@ -36,7 +36,9 @@ export default function CitiesPage() {
         if (data && data.length > 0) {
           setCities(data);
         } else {
-          setError("No cities available. Please add cities from the admin panel.");
+          setError(
+            "No cities available. Please add cities from the admin panel."
+          );
         }
         hasFetched.current = true;
       } catch (err) {
@@ -57,13 +59,16 @@ export default function CitiesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         {/* Hero Section */}
         <div className="mb-12 md:mb-16">
           <div className="mb-4 md:mb-6 px-3 border border-gray-300 py-1 w-fit rounded-full bg-white">
             <p className="text-xs md:text-sm text-gray-700 tracking-tight">
-              Explore <span className="font-semibold text-black italic">real estate markets</span> worldwide
+              Explore{" "}
+              <span className="font-semibold text-black italic">
+                real estate markets
+              </span>{" "}
+              worldwide
             </p>
           </div>
 
@@ -72,7 +77,8 @@ export default function CitiesPage() {
           </h1>
 
           <p className="text-lg text-gray-600 mb-8 w-full lg:w-2/3">
-            Browse real estate markets across cities worldwide. Get market exposure and track prices in real-time.
+            Browse real estate markets across cities worldwide. Get market
+            exposure and track prices in real-time.
           </p>
         </div>
 
@@ -84,7 +90,9 @@ export default function CitiesPage() {
           </div>
         ) : error ? (
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 md:p-8 text-center">
-            <h3 className="text-lg font-semibold text-red-900 mb-2">No Markets Available</h3>
+            <h3 className="text-lg font-semibold text-red-900 mb-2">
+              No Markets Available
+            </h3>
             <p className="text-red-700 mb-4">{error}</p>
             <button
               onClick={() => router.push("/")}
@@ -96,15 +104,20 @@ export default function CitiesPage() {
           </div>
         ) : cities.length === 0 ? (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 md:p-8 text-center">
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">Coming Soon</h3>
-            <p className="text-blue-700">Markets are being added. Check back soon!</p>
+            <h3 className="text-lg font-semibold text-blue-900 mb-2">
+              Coming Soon
+            </h3>
+            <p className="text-blue-700">
+              Markets are being added. Check back soon!
+            </p>
           </div>
         ) : (
           <>
             {/* Stats */}
             <div className="mb-8 md:mb-12">
               <p className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                {cities.length} {cities.length === 1 ? "Market" : "Markets"} Available
+                {cities.length} {cities.length === 1 ? "Market" : "Markets"}{" "}
+                Available
               </p>
             </div>
 
@@ -122,7 +135,9 @@ export default function CitiesPage() {
                       <h3 className="text-xl md:text-2xl font-semibold text-gray-900 group-hover:text-[#065F46] transition-colors">
                         {city.cityName}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">{city.country}</p>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {city.country}
+                      </p>
                     </div>
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                       <ArrowRight className="w-5 h-5 text-[#065F46]" />
@@ -157,11 +172,14 @@ export default function CitiesPage() {
                         Last Updated
                       </p>
                       <p className="text-xs text-gray-600">
-                        {new Date(city.timestamp * 1000).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
+                        {new Date(city.timestamp * 1000).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          }
+                        )}
                       </p>
                     </div>
                   </div>
