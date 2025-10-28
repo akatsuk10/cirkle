@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
-import { useProgram } from "@/utils/cerkle";
-import { initVault } from "@/initialize";
+import { useProgram } from "@/lib/solana/cerkle/cerkle";
+import { initVault } from "@/lib/solana/admin/initialize";
 
 export default function AdminPage() {
   const wallet = useAnchorWallet();

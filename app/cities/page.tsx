@@ -3,8 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, ArrowRight } from "lucide-react";
-import { getCityList } from "@/utils/solana/oracle/getCityList";
-import { useOracleProgram } from "@/utils/oracle";
+import { getCityList } from "@/lib/solana/oracle/getCityList";
+import { useOracleProgram } from "@/lib/solana/oracle/oracle";
 import Header from "@/components/landing/Header";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 

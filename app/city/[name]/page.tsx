@@ -9,11 +9,11 @@ import {
   useWallet,
 } from "@solana/wallet-adapter-react";
 import { Loader2, ArrowLeft, TrendingUp, TrendingDown } from "lucide-react";
-import { getCity } from "@/utils/solana/oracle/getCity";
-import { useOracleProgram } from "@/utils/oracle";
-import { buyToken } from "@/utils/solana/cerkle/buy";
-import { sellToken } from "@/utils/solana/cerkle/sell";
-import { useProgram } from "@/utils/cerkle";
+import { getCity } from "@/lib/solana/oracle/getCity";
+import { useOracleProgram } from "@/lib/solana/oracle/oracle";
+import { buyToken } from "@/lib/solana/cerkle/buy";
+import { sellToken } from "@/lib/solana/cerkle/sell";
+import { useProgram } from "@/lib/solana/cerkle/cerkle";
 import { getAssociatedTokenAddress } from "@solana/spl-token";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 

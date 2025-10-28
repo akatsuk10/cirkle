@@ -2,9 +2,8 @@
 
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
-import { useProgram } from "./utils/cerkle";
 import { Program } from "@coral-xyz/anchor";
-import { CirkleContract } from "./idl/cirkle_contract";
+import { CirkleContract } from "@/idl/cirkle_contract";
 
 const adminKey = process.env.NEXT_PUBLIC_ADMIN_PUBLICKEY!;
 const adminPubkey = new PublicKey(adminKey);
