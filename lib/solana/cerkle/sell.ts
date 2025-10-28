@@ -64,7 +64,6 @@ export async function sellToken(
 
     const errorMessage = err.message || err.toString();
 
-    // Check for various "already processed" error messages
     if (
       errorMessage.includes("already been processed") ||
       errorMessage.includes("This transaction has already been processed") ||

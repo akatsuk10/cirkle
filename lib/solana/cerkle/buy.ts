@@ -14,12 +14,11 @@ import {
   TOKEN_PROGRAM_ID,
   ASSOCIATED_TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
+import { getCityImage } from "@/lib/unsplash";
+import { uploadCityMetadataToIPFS } from "@/lib/ipfs";
 
 const ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_PUBLICKEY!;
 
-/**
- * Buy city tokens with increased compute budget
- */
 export async function buyToken(
   program: Program<CirkleContract>,
   connection: Connection,
@@ -40,7 +39,6 @@ export async function buyToken(
 
     const adminPubkey = new PublicKey(ADMIN_KEY);
 
-    // --- PDAs ---
     const [vaultPda] = PublicKey.findProgramAddressSync(
       [Buffer.from("protocol_admin"), adminPubkey.toBuffer()],
       program.programId
@@ -65,18 +63,15 @@ export async function buyToken(
       userAta: userAta.toString(),
     });
 
-    // Get recent blockhash first
     const { blockhash, lastValidBlockHeight } =
       await connection.getLatestBlockhash("confirmed");
 
-    // Create transaction with compute budget
     const transaction = new Transaction({
       feePayer: userPubkey,
       blockhash,
       lastValidBlockHeight,
     });
 
-    // Add compute budget instructions
     transaction.add(
       ComputeBudgetProgram.setComputeUnitLimit({
         units: 400_000,
@@ -89,29 +84,123 @@ export async function buyToken(
       })
     );
 
-    // Create the buy instruction
-    const buyIx = await program.methods
-      .buy(cityName, new BN(lamports), new BN(circleRate), new BN(solPriceUsd))
-      .accountsPartial({
-        user: userPubkey,
-        admin: adminPubkey,
-        vault: vaultPda,
-        cityConfig: cityConfigPda,
-        cityMint: cityMintPda,
-        userAta,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        systemProgram: SystemProgram.programId,
-        rent: SYSVAR_RENT_PUBKEY,
-      })
-      .instruction();
+    console.log("Checking if city config already exists...");
+    let finalImageUrl = "";
 
-    // Add the buy instruction
+    try {
+      const existingCityConfig = await program.account.cityConfig.fetch(
+        cityConfigPda
+      );
+      if (existingCityConfig && existingCityConfig.metadataUri) {
+        finalImageUrl = existingCityConfig.metadataUri;
+        console.log(
+          "City already has image on-chain, reusing:",
+          finalImageUrl
+        );
+      }
+    } catch (err) {
+      console.log(
+        "City config doesn't exist yet, will create it"
+      );
+    }
+
+    if (!finalImageUrl) {
+      console.log("Fetching city image for:", cityName);
+      const unsplashImageUrl = await getCityImage(cityName);
+
+      if (unsplashImageUrl) {
+        try {
+          console.log("Uploading city metadata to IPFS via Pinata V3...");
+          const startTime = Date.now();
+
+          const metadataPromise = uploadCityMetadataToIPFS(
+            unsplashImageUrl,
+            cityName
+          );
+          const timeoutPromise = new Promise<null>((resolve) =>
+            setTimeout(() => resolve(null), 30000)
+          );
+
+          const metadataUri = await Promise.race([
+            metadataPromise,
+            timeoutPromise,
+          ]);
+          const uploadTime = ((Date.now() - startTime) / 1000).toFixed(2);
+
+          if (metadataUri) {
+            finalImageUrl = metadataUri;
+            console.log(
+              `Metadata upload successful in ${uploadTime}s:`,
+              finalImageUrl
+            );
+          } else {
+            finalImageUrl = unsplashImageUrl;
+            console.log(
+              `Metadata upload timeout/failed (${uploadTime}s), using Unsplash URL:`,
+              finalImageUrl
+            );
+          }
+        } catch (ipfsError) {
+          console.error("Metadata upload error:", ipfsError);
+          finalImageUrl = unsplashImageUrl;
+          console.log("Using fallback Unsplash URL:", finalImageUrl);
+        }
+      }
+    }
+
+    console.log("Final image URL for contract:", finalImageUrl);
+    console.log(
+      `Image URL length: ${finalImageUrl.length} characters (max: 128)`
+    );
+
+    if (finalImageUrl.length > 128) {
+      console.error(`Image URL too long: ${finalImageUrl.length} > 128`);
+      throw new Error(
+        `Image URL exceeds 128 character limit (${finalImageUrl.length} chars)`
+      );
+    }
+
+    console.log("Creating buy instruction with params:", {
+      cityName,
+      lamports,
+      circleRate,
+      solPriceUsd,
+      imageUrlLength: finalImageUrl.length,
+    });
+
+    let buyIx;
+    try {
+      buyIx = await program.methods
+        .buy(
+          cityName,
+          new BN(lamports),
+          new BN(circleRate),
+          new BN(solPriceUsd),
+          finalImageUrl
+        )
+        .accountsPartial({
+          user: userPubkey,
+          admin: adminPubkey,
+          vault: vaultPda,
+          cityConfig: cityConfigPda,
+          cityMint: cityMintPda,
+          userAta,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          systemProgram: SystemProgram.programId,
+          rent: SYSVAR_RENT_PUBKEY,
+        })
+        .instruction();
+      console.log("Buy instruction created");
+    } catch (ixError) {
+      console.error("Failed to create buy instruction:", ixError);
+      throw ixError;
+    }
+
     transaction.add(buyIx);
 
     console.log("Transaction created, simulating...");
 
-    // Simulate transaction first to catch errors early
     try {
       const simulation = await connection.simulateTransaction(transaction);
       console.log("Simulation result:", simulation);
@@ -121,15 +210,12 @@ export async function buyToken(
         console.error("Simulation failed:", simulation.value.err);
         console.error("Logs:", simulation.value.logs);
 
-        // If already processed, treat as success
         if (errorMsg.includes("already been processed")) {
           console.log("Transaction already processed successfully!");
           return "Success";
         }
 
-        throw new Error(
-          `Simulation failed: ${errorMsg}`
-        );
+        throw new Error(`Simulation failed: ${errorMsg}`);
       }
 
       console.log("Simulation successful");
@@ -139,16 +225,22 @@ export async function buyToken(
       throw simError;
     }
 
-    // Send transaction
-    console.log("Sending transaction...");
-    const signature = await sendTransaction(transaction, connection, {
-      skipPreflight: false,
-      preflightCommitment: "confirmed",
-    });
+    console.log("Sending transaction to wallet for signing...");
 
-    console.log("Transaction sent:", signature);
+    let signature: string;
+    try {
+      signature = await sendTransaction(transaction, connection, {
+        skipPreflight: false,
+        preflightCommitment: "confirmed",
+      });
+      console.log("Transaction sent:", signature);
+    } catch (sendError: any) {
+      console.error("Send transaction failed:", sendError);
+      console.error("Error message:", sendError.message);
+      console.error("Error logs:", sendError.logs);
+      throw sendError;
+    }
 
-    // Wait for confirmation
     console.log("Waiting for confirmation...");
     const confirmation = await connection.confirmTransaction(
       {
@@ -167,7 +259,6 @@ export async function buyToken(
 
     console.log("Buy transaction confirmed:", signature);
 
-    // Fetch transaction details
     const txDetails = await connection.getTransaction(signature, {
       commitment: "confirmed",
       maxSupportedTransactionVersion: 0,
@@ -178,14 +269,19 @@ export async function buyToken(
     return signature;
   } catch (error: any) {
     console.error("Error in buyToken:", error);
+    console.error("Error type:", error.constructor.name);
+    console.error("Error message:", error.message);
 
-    // Extract more detailed error info
     if (error instanceof SendTransactionError) {
       console.error("Transaction logs:", error.logs);
     }
 
     if (error.logs) {
       console.error("Error logs:", error.logs);
+    }
+
+    if (error.code) {
+      console.error("Error code:", error.code);
     }
 
     throw error;

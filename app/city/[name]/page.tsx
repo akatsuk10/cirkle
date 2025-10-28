@@ -2,12 +2,13 @@
 
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   useAnchorWallet,
   useConnection,
   useWallet,
 } from "@solana/wallet-adapter-react";
+import { getIPFSGatewayUrl } from "@/lib/ipfs";
 import { Loader2, ArrowLeft, TrendingUp, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
 import { getCity } from "@/lib/solana/oracle/getCity";
@@ -33,11 +34,15 @@ export default function CityPage() {
   const { program } = useProgram();
   const { publicKey, sendTransaction } = useWallet();
   const hasFetched = useRef(false);
+  const lastAttemptedCityRef = useRef<string | null>(null);
+  const lastFetchedBalancesCityRef = useRef<string | null>(null);
   const [txLoading, setTxLoading] = useState(false);
   const [solAmount, setSolAmount] = useState<string>("1");
   const [sellAmount, setSellAmount] = useState<string>("1");
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0);
   const [userSolBalance, setUserSolBalance] = useState<number>(0);
+  const [tokenImage, setTokenImage] = useState<string | null>(null);
+  const [tokenImageLoading, setTokenImageLoading] = useState(false);
 
   useEffect(() => {
     const fetchCity = async () => {
@@ -75,51 +80,44 @@ export default function CityPage() {
   const getMintAndCityConfig = async () => {
     if (!publicKey || !program || !city) return;
 
-    // Derive mint PDA from city name
     const [cityMintPda] = PublicKey.findProgramAddressSync(
       [Buffer.from("city-mint"), Buffer.from(city.cityName)],
       program.programId
     );
 
-    // Derive city config PDA
     const [cityConfigPda] = PublicKey.findProgramAddressSync(
       [Buffer.from("city-config"), Buffer.from(city.cityName)],
       program.programId
     );
 
-    // Get user's ATA for this mint
     const userAta = await getAssociatedTokenAddress(cityMintPda, publicKey);
 
     return { mint: cityMintPda, cityConfigPda, userAta };
   };
 
-  const fetchTokenBalance = async () => {
+  const fetchTokenBalance = useCallback(async () => {
     try {
       if (!publicKey || !program || !city || !connection) {
         setUserTokenBalance(0);
         return;
       }
 
-      // Derive mint PDA from city name
       const [cityMintPda] = PublicKey.findProgramAddressSync(
         [Buffer.from("city-mint"), Buffer.from(city.cityName)],
         program.programId
       );
 
-      // Get user's ATA for this mint
       const userAta = await getAssociatedTokenAddress(cityMintPda, publicKey);
 
-      // Fetch token balance
       const tokenAccount = await connection.getTokenAccountBalance(userAta);
       const balance = tokenAccount.value.uiAmount || 0;
       setUserTokenBalance(balance);
     } catch (err) {
-      // Account might not exist yet if no tokens purchased
       setUserTokenBalance(0);
     }
-  };
+  }, [publicKey, program, city, connection]);
 
-  const fetchSolBalance = async () => {
+  const fetchSolBalance = useCallback(async () => {
     try {
       if (!publicKey || !connection) {
         setUserSolBalance(0);
@@ -132,23 +130,76 @@ export default function CityPage() {
     } catch (err) {
       setUserSolBalance(0);
     }
-  };
-
-  useEffect(() => {
-    if (publicKey && connection) {
-      fetchSolBalance();
-      const interval = setInterval(fetchSolBalance, 5000);
-      return () => clearInterval(interval);
-    }
   }, [publicKey, connection]);
 
-  useEffect(() => {
-    if (city && publicKey && program) {
-      fetchTokenBalance();
-      const interval = setInterval(fetchTokenBalance, 5000);
-      return () => clearInterval(interval);
+  const fetchTokenImage = useCallback(async () => {
+    try {
+      if (!program || !city) {
+        setTokenImage(null);
+        return;
+      }
+
+      setTokenImageLoading(true);
+
+      const [cityConfigPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("city-config"), Buffer.from(city.cityName)],
+        program.programId
+      );
+
+      const cityConfig = await program.account.cityConfig.fetch(cityConfigPda);
+
+      if (cityConfig && cityConfig.metadataUri) {
+        const metadataUri = cityConfig.metadataUri;
+        console.log("Fetching metadata from:", metadataUri);
+
+        try {
+          const metadataResponse = await fetch(metadataUri);
+          if (metadataResponse.ok) {
+            const metadata = await metadataResponse.json();
+            if (metadata.image) {
+              console.log("Got image from metadata:", metadata.image);
+              const displayUrl = getIPFSGatewayUrl(metadata.image);
+              setTokenImage(displayUrl);
+              return;
+            }
+          }
+        } catch (metadataError) {
+          console.log("Failed to fetch metadata, using URI directly:", metadataError);
+        }
+
+        setTokenImage(metadataUri);
+      }
+    } catch (err) {
+      console.log("Token image not yet available:", err);
+      setTokenImage(null);
+    } finally {
+      setTokenImageLoading(false);
     }
-  }, [city, publicKey, program, connection]);
+  }, [program, city]);
+
+  useEffect(() => {
+    if (!city || !program) return;
+
+    if (lastAttemptedCityRef.current !== city.cityName) {
+      lastAttemptedCityRef.current = city.cityName;
+      fetchTokenImage();
+    }
+  }, [city]);
+
+  useEffect(() => {
+    if (!publicKey || !connection || !program || !city) return;
+
+    if (lastFetchedBalancesCityRef.current !== city.cityName) {
+      lastFetchedBalancesCityRef.current = city.cityName;
+      fetchSolBalance();
+      fetchTokenBalance();
+    }
+  }, [publicKey, connection, program, city, fetchSolBalance, fetchTokenBalance]);
+
+  const refreshBalances = useCallback(() => {
+    fetchSolBalance();
+    fetchTokenBalance();
+  }, [fetchSolBalance, fetchTokenBalance]);
 
   const handleBuy = async () => {
     if (!city || !program || !publicKey || !solAmount || !sendTransaction)
@@ -192,8 +243,7 @@ export default function CityPage() {
         duration: 5000,
       });
 
-      // Refresh token balance after successful transaction
-      setTimeout(() => fetchTokenBalance(), 2000);
+      setTimeout(() => refreshBalances(), 2000);
     } catch (err: any) {
       console.error("Buy failed:", err);
       let errorMessage = "Unknown error";
@@ -259,8 +309,7 @@ export default function CityPage() {
         });
       }
 
-      // Refresh token balance after successful transaction
-      setTimeout(() => fetchTokenBalance(), 2000);
+      setTimeout(() => refreshBalances(), 2000);
     } catch (err) {
       console.error("Sell failed:", err);
       let errorMessage = "Unknown error";
@@ -320,7 +369,6 @@ export default function CityPage() {
     <div className="min-h-screen bg-gray-50">
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Back Button */}
         <button
           onClick={() => router.back()}
           className="inline-flex items-center space-x-2 text-[#065F46] hover:opacity-70 transition mb-8"
@@ -329,7 +377,6 @@ export default function CityPage() {
           <span>Back to Markets</span>
         </button>
 
-        {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-start justify-between mb-4">
             <div>
@@ -341,9 +388,27 @@ export default function CityPage() {
           </div>
         </div>
 
-        {/* Info Grid */}
+        {tokenImage && (
+          <div className="mb-12 bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <div className="relative h-80 w-full overflow-hidden">
+              <img
+                src={tokenImage}
+                alt={`${city.cityName} Token`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                {city.cityName} Token
+              </h2>
+              <p className="text-gray-600 text-sm">
+                City-based real estate tokenization
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {/* Market Rate Card */}
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center space-x-2 mb-2">
               <TrendingUp className="w-5 h-5 text-[#065F46]" />
@@ -357,7 +422,6 @@ export default function CityPage() {
             <p className="text-xs text-gray-500 mt-2">per sq.ft</p>
           </div>
 
-          {/* Area Card */}
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
               Total Area
@@ -369,7 +433,6 @@ export default function CityPage() {
           </div>
         </div>
 
-        {/* Market Details */}
         <div className="bg-white border border-gray-200 rounded-xl p-6 mb-12">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Market Details
@@ -404,9 +467,7 @@ export default function CityPage() {
           </div>
         </div>
 
-        {/* Trading Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Buy Section */}
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center space-x-2 mb-4">
               <TrendingUp className="w-5 h-5 text-green-600" />
@@ -468,7 +529,6 @@ export default function CityPage() {
             </div>
           </div>
 
-          {/* Sell Section */}
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <div className="flex items-center space-x-2 mb-4">
               <TrendingDown className="w-5 h-5 text-red-600" />
