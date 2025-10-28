@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/cirkle_contract.json`.
  */
 export type CirkleContract = {
-  "address": "5s8sxuXaNoJp1imQ6uD89jGefKXXL1jgcNE7xUYFPgrs",
+  "address": "Es7CnmurWMiDfEUCrFVBpHvWy7jqdVHf8a7mtMnN7bmg",
   "metadata": {
     "name": "cirkleContract",
     "version": "0.1.0",
@@ -243,11 +243,11 @@ export type CirkleContract = {
           "type": "string"
         },
         {
-          "name": "circleRate",
+          "name": "solAmount",
           "type": "u64"
         },
         {
-          "name": "solAmount",
+          "name": "circleRate",
           "type": "u64"
         },
         {

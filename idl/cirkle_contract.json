@@ -1,5 +1,5 @@
 {
-  "address": "5s8sxuXaNoJp1imQ6uD89jGefKXXL1jgcNE7xUYFPgrs",
+  "address": "Es7CnmurWMiDfEUCrFVBpHvWy7jqdVHf8a7mtMnN7bmg",
   "metadata": {
     "name": "cirkle_contract",
     "version": "0.1.0",
@@ -237,11 +237,11 @@
           "type": "string"
         },
         {
-          "name": "circle_rate",
+          "name": "sol_amount",
           "type": "u64"
         },
         {
-          "name": "sol_amount",
+          "name": "circle_rate",
           "type": "u64"
         },
         {
