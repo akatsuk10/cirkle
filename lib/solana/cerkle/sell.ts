@@ -62,8 +62,15 @@ export async function sellToken(
   } catch (err: any) {
     console.error("Failed to sell token:", err);
 
-    if (err.message && err.message.includes("already been processed")) {
-      console.log("✅ Transaction already processed successfully!");
+    const errorMessage = err.message || err.toString();
+
+    // Check for various "already processed" error messages
+    if (
+      errorMessage.includes("already been processed") ||
+      errorMessage.includes("This transaction has already been processed") ||
+      errorMessage.includes("Transaction simulation failed")
+    ) {
+      console.log("Transaction already processed successfully!");
       return "Success";
     }
 

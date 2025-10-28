@@ -36,7 +36,7 @@ export async function getCityList(
       area: Number(c.area),
     }));
   } catch (err) {
-    console.error("❌ Failed to get city list:", err);
+    console.error("Failed to get city list:", err);
     return null;
   }
 }

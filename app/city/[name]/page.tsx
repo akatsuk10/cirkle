@@ -9,6 +9,7 @@ import {
   useWallet,
 } from "@solana/wallet-adapter-react";
 import { Loader2, ArrowLeft, TrendingUp, TrendingDown } from "lucide-react";
+import { toast } from "sonner";
 import { getCity } from "@/lib/solana/oracle/getCity";
 import { useOracleProgram } from "@/lib/solana/oracle/oracle";
 import { buyToken } from "@/lib/solana/cerkle/buy";
@@ -36,6 +37,7 @@ export default function CityPage() {
   const [solAmount, setSolAmount] = useState<string>("1");
   const [sellAmount, setSellAmount] = useState<string>("1");
   const [userTokenBalance, setUserTokenBalance] = useState<number>(0);
+  const [userSolBalance, setUserSolBalance] = useState<number>(0);
 
   useEffect(() => {
     const fetchCity = async () => {
@@ -117,6 +119,29 @@ export default function CityPage() {
     }
   };
 
+  const fetchSolBalance = async () => {
+    try {
+      if (!publicKey || !connection) {
+        setUserSolBalance(0);
+        return;
+      }
+
+      const balanceLamports = await connection.getBalance(publicKey);
+      const balanceSol = balanceLamports / LAMPORTS_PER_SOL;
+      setUserSolBalance(balanceSol);
+    } catch (err) {
+      setUserSolBalance(0);
+    }
+  };
+
+  useEffect(() => {
+    if (publicKey && connection) {
+      fetchSolBalance();
+      const interval = setInterval(fetchSolBalance, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [publicKey, connection]);
+
   useEffect(() => {
     if (city && publicKey && program) {
       fetchTokenBalance();
@@ -140,7 +165,7 @@ export default function CityPage() {
         return;
       }
 
-      console.log("🚀 Starting buy transaction:", {
+      console.log("Starting buy transaction:", {
         cityName: city.cityName,
         solAmount: amount,
         lamports: amount * LAMPORTS_PER_SOL,
@@ -159,24 +184,27 @@ export default function CityPage() {
         solPriceUsd
       );
 
-      console.log("✅ Buy success:", tx);
+      console.log("Buy success:", tx);
       setTransactionError(null);
       setSolAmount("1");
-      alert(
-        `Successfully bought tokens!\n\nTransaction: ${tx}\n\nView on Explorer: https://explorer.solana.com/tx/${tx}?cluster=devnet`
-      );
+      toast.success("Successfully bought tokens!", {
+        description: `View on Explorer: https://explorer.solana.com/tx/${tx}?cluster=devnet`,
+        duration: 5000,
+      });
 
-      setTimeout(() => window.location.reload(), 2000);
+      // Refresh token balance after successful transaction
+      setTimeout(() => fetchTokenBalance(), 2000);
     } catch (err: any) {
-      console.error("❌ Buy failed:", err);
+      console.error("Buy failed:", err);
       let errorMessage = "Unknown error";
       if (err.message) {
         errorMessage = err.message;
       }
       if (err.logs) {
-        console.log("📋 Full error logs:", err.logs);
+        console.log("Full error logs:", err.logs);
       }
       setTransactionError(errorMessage);
+      toast.error("Buy failed", { description: errorMessage });
     } finally {
       setTxLoading(false);
     }
@@ -215,26 +243,32 @@ export default function CityPage() {
         solPriceUsd
       );
 
-      console.log("✅ Sell success:", tx);
+      console.log("Sell success:", tx);
       setTransactionError(null);
       setSellAmount("1");
 
       if (tx === "Success") {
-        alert(`Successfully sold tokens!\n\nTransaction was already processed on-chain.`);
+        toast.success("Successfully sold tokens!", {
+          description: "Transaction was already processed on-chain.",
+          duration: 5000,
+        });
       } else {
-        alert(
-          `Successfully sold tokens!\n\nTransaction: ${tx}\n\nView on Explorer: https://explorer.solana.com/tx/${tx}?cluster=devnet`
-        );
+        toast.success("Successfully sold tokens!", {
+          description: `View on Explorer: https://explorer.solana.com/tx/${tx}?cluster=devnet`,
+          duration: 5000,
+        });
       }
 
-      setTimeout(() => window.location.reload(), 2000);
+      // Refresh token balance after successful transaction
+      setTimeout(() => fetchTokenBalance(), 2000);
     } catch (err) {
-      console.error("❌ Sell failed:", err);
+      console.error("Sell failed:", err);
       let errorMessage = "Unknown error";
       if (err instanceof Error) {
         errorMessage = err.message;
       }
       setTransactionError(errorMessage);
+      toast.error("Sell failed", { description: errorMessage });
     } finally {
       setTxLoading(false);
     }
@@ -383,9 +417,25 @@ export default function CityPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  SOL Amount
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    SOL Amount
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setSolAmount((userSolBalance / 2).toFixed(4))}
+                      className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition"
+                    >
+                      50%
+                    </button>
+                    <button
+                      onClick={() => setSolAmount(userSolBalance.toFixed(4))}
+                      className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition"
+                    >
+                      Max
+                    </button>
+                  </div>
+                </div>
                 <input
                   type="number"
                   min="0"
@@ -395,9 +445,10 @@ export default function CityPage() {
                   placeholder="1.0"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Rate: ${city.rate.toLocaleString()} per token
-                </p>
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Rate: ${city.rate.toLocaleString()} per token</span>
+                  <span>Balance: {userSolBalance.toFixed(4)} SOL</span>
+                </div>
               </div>
 
               <button
@@ -428,9 +479,25 @@ export default function CityPage() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Token Amount
-                </label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    Token Amount
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setSellAmount((userTokenBalance / 2).toFixed(6))}
+                      className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition"
+                    >
+                      50%
+                    </button>
+                    <button
+                      onClick={() => setSellAmount(userTokenBalance.toFixed(6))}
+                      className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition"
+                    >
+                      Max
+                    </button>
+                  </div>
+                </div>
                 <input
                   type="number"
                   min="0"

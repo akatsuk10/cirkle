@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SolanaWalletProvider } from "@/lib/SolanaProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const helvetica = localFont({
   src: [
@@ -52,6 +53,7 @@ export default function RootLayout({
         <SolanaWalletProvider>
           {children}
         </SolanaWalletProvider>
+        <Toaster />
       </body>
     </html>
   );

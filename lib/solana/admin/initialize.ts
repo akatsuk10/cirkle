@@ -33,10 +33,10 @@ export const initVault = async (
       })
       .rpc();
 
-    console.log("✅ Vault initialized successfully!");
+    console.log("Vault initialized successfully!");
     console.log("Tx Signature:", txSig);
     return txSig;
   } catch (err) {
-    console.error("❌ Vault initialization failed:", err);
+    console.error("Vault initialization failed:", err);
   }
 };

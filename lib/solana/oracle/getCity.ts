@@ -38,7 +38,7 @@ export async function getCity(
       area: Number(city.area.toString()),
     };
   } catch (err) {
-    console.error("❌ Failed to get city info:", err);
+    console.error("Failed to get city info:", err);
     return null;
   }
 }
