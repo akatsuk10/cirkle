@@ -103,7 +103,7 @@ export default function CityPage() {
     setTransactionError(null);
 
     try {
-      const solPriceUsd = 150;
+      const solPriceUsd = 200;
       const amount = parseFloat(solAmount);
 
       if (isNaN(amount) || amount <= 0) {
@@ -126,7 +126,7 @@ export default function CityPage() {
         publicKey,
         city.cityName,
         amount * LAMPORTS_PER_SOL,
-        city.rate * 1000,
+        city.rate,
         solPriceUsd
       );
 

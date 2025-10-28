@@ -91,12 +91,7 @@ export async function buyToken(
 
     // Create the buy instruction
     const buyIx = await program.methods
-      .buy(
-        cityName,
-        new BN(circleRate),
-        new BN(lamports),
-        new BN(solPriceUsd)
-      )
+      .buy(cityName, new BN(lamports), new BN(circleRate), new BN(solPriceUsd))
       .accountsPartial({
         user: userPubkey,
         admin: adminPubkey,

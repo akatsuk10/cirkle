@@ -40,9 +40,8 @@ export async function sellToken(
 
     const tx = await program.methods
       .sell(new BN(circleRate), new BN(tokenAmount))
-      .accounts({
+      .accountsPartial({
         user: userPubkey,
-        //@ts-ignore
         vault: vaultPda,
         cityConfig,
         mint,

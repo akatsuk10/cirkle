@@ -3,7 +3,6 @@ import { AnchorProvider, Program } from "@coral-xyz/anchor";
 import { CirkleContract } from "@/idl/cirkle_contract";
 import idl from "@/idl/cirkle_contract.json";
 
-
 export function useProgram(): {
   program: Program<CirkleContract> | null;
   provider: AnchorProvider | null;
