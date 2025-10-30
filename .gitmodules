@@ -1,0 +1,6 @@
+[submodule "cirkle-contract"]
+	path = cirkle-contract
+	url = https://github.com/akatsuk10/cirkle-contract.git
+[submodule "circle-rate-oracle"]
+	path = circle-rate-oracle
+	url = https://github.com/akatsuk10/circle-rate-oracle.git
