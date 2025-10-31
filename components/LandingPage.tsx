@@ -9,14 +9,9 @@ import Footer from "./landing/Footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[#F8F8F8]">
       <Header />
-      <MainContent />
-      <TrustedBy />
-      <PopularMarkets />
-      <FAQ />
       <BrandSection />
-      <Footer />
     </div>
   );
 }

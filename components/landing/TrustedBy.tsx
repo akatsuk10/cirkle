@@ -1,23 +1,7 @@
 export default function TrustedBy() {
   return (
     <div className="max-w-[1200px] mx-auto py-6 border-l border-r relative">
-      <div className="overflow-hidden bg-white border-y py-8 px-4 lg:px-6 relative">
-        {/* Corner decorations matching MainContent */}
-        <div className="absolute -top-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10">
-
-        </div>
-        
-        <div className="absolute -top-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10">
-
-        </div>
-        
-        <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10">
-
-        </div>
-        
-        <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10">
-
-        </div>
+      <div className="overflow-hidden py-8 px-4 lg:px-6 relative">
 
         <div className="max-w-2xl">
           <h2 className="text-3xl lg:text-3xl font-semibold text-gray-900 mb-4 leading-tight">

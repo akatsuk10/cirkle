@@ -39,12 +39,7 @@ export default function PopularMarkets() {
 
   return (
     <div className="max-w-[1200px] mx-auto py-16 border-l border-r relative">
-      <div className="overflow-hidden bg-white border-y py-8 lg:px-3 relative">
-        {/* Corner decorations */}
-        <div className="absolute -top-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -top-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
+      <div className="overflow-hidden py-8 lg:px-3 relative">
 
         <div className="px-4">
           {/* Header */}

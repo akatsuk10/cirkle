@@ -41,12 +41,7 @@ export default function FAQ() {
 
   return (
     <div className="max-w-[1200px] mx-auto pt-8 border-l border-r relative">
-      <div className="overflow-hidden bg-white border-t py-8 lg:px-6 relative">
-        {/* Corner decorations */}
-        <div className="absolute -top-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -top-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
+      <div className="overflow-hidden py-8 lg:px-6 relative">
 
         <div className="px-4 md:px-6">
           {/* Header */}
@@ -79,7 +74,7 @@ export default function FAQ() {
           {/* Contact CTA */}
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-4">Still have questions?</p>
-            <button className="bg-[#065F46] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-[#065F46]/80 transition-colors">
+            <button className="bg-black text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-black/80 transition-colors">
               Contact Support
             </button>
           </div>

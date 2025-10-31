@@ -42,7 +42,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <div className="text-2xl font-semibold tracking-tight text-gray-900">
-              Cirkle
+              Cirkle<span className="text-red-500">.</span>
             </div>
             <div className="hidden md:flex items-center space-x-6">
               {["Solutions", "Enterprise", "Developer", "Resources", "Pricing"].map((item) => (
@@ -62,7 +62,7 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={handleConnectWallet}
-              className="bg-[#065F46] text-white cursor-pointer text-sm font-medium px-4 py-2 rounded-full hover:bg-[#065F46]/80 transition-colors"
+              className="bg-black text-white cursor-pointer text-sm font-medium px-4 py-2 rounded-full hover:bg-gray-900 transition-colors"
             >
               {connected
                 ? `${publicKey?.toBase58().slice(0, 4)}...${publicKey

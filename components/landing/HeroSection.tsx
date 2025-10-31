@@ -49,7 +49,7 @@ export default function HeroSection() {
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
         <Link href="/cities">
-        <button className="bg-[#065F46] cursor-pointer text-sm hover:bg-[#065F46]/80 text-white font-semibold py-3 px-6 rounded-full transition-colors w-full sm:w-auto">
+        <button className="bg-black cursor-pointer text-sm hover:bg-black/80 text-white font-semibold py-3 px-6 rounded-full transition-colors w-full sm:w-auto">
           View Available Deals
         </button>
         </Link>
