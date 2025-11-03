@@ -152,18 +152,19 @@ export default function CitiesPage() {
                         Market Rate
                       </p>
                       <p className="text-2xl font-bold text-[#065F46]">
-                        ${city.rate.toLocaleString()}
+                        ${(city.rate / 100).toLocaleString()}
                       </p>
                     </div>
 
                     {/* Area */}
                     <div>
                       <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-                        Area
+                        Total Population
                       </p>
                       <p className="text-sm text-gray-700">
-                        {(city.area / 1_000_000).toFixed(2)} M sq.ft
+                        {city.area.toLocaleString()}
                       </p>
+
                     </div>
 
                     {/* Last Updated */}

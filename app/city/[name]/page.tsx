@@ -231,7 +231,7 @@ export default function CityPage() {
         cityName: city.cityName,
         solAmount: amount,
         lamports: amount * LAMPORTS_PER_SOL,
-        circleRate: city.rate,
+        circleRate: city.rate/100,
         solPriceUsd: solPriceUsd,
       });
 
@@ -242,7 +242,7 @@ export default function CityPage() {
         publicKey,
         city.cityName,
         amount * LAMPORTS_PER_SOL,
-        city.rate,
+        city.rate/100,
         solPriceUsd
       );
 
@@ -304,7 +304,7 @@ export default function CityPage() {
         program,
         publicKey,
         city.cityName,
-        city.rate,
+        city.rate/100,
         amount,
         mint,
         userAta,
@@ -434,17 +434,17 @@ export default function CityPage() {
               </p>
             </div>
             <p className="text-3xl md:text-4xl font-bold text-[#065F46]">
-              ${city.rate.toLocaleString()}
+              ${(city.rate/100).toLocaleString()}
             </p>
             <p className="text-xs text-gray-500 mt-2">per sq.ft</p>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
-              Total Area
+              Total Population
             </p>
             <p className="text-3xl md:text-4xl font-bold text-gray-900">
-              {(city.area / 1_000_000).toFixed(2)}M
+              {(city.area).toLocaleString()}
             </p>
             <p className="text-xs text-gray-500 mt-2">square feet</p>
           </div>
@@ -466,7 +466,7 @@ export default function CityPage() {
                 Area
               </p>
               <p className="text-sm text-gray-900">
-                {(city.area / 1_000_000).toFixed(2)}M sq.ft
+                {(city.area).toLocaleString()}
               </p>
             </div>
             <div>
@@ -524,7 +524,7 @@ export default function CityPage() {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>Rate: ${city.rate.toLocaleString()} per token</span>
+                  <span>Rate: ${(city.rate/100).toLocaleString()} per token</span>
                   <span>Balance: {userSolBalance.toFixed(4)} SOL</span>
                 </div>
               </div>
