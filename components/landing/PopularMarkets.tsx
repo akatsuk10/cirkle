@@ -1,4 +1,7 @@
 import { ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function PopularMarkets() {
   const markets = [
@@ -38,73 +41,74 @@ export default function PopularMarkets() {
   ];
 
   return (
-    <div className="max-w-[1200px] mx-auto py-16 border-l border-r relative">
-      <div className="overflow-hidden py-8 lg:px-3 relative">
+    <section className="w-full border-l border-r border-border">
+      <div className="max-w-[1200px] mx-auto px-4 lg:px-6 py-12 md:py-16">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl md:text-3xl font-semibold text-foreground">Popular Markets Today</h2>
+          <Button variant="ghost" size="sm" className="gap-1">
+            View All
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
 
-        <div className="px-4">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900">Popular Markets Today</h2>
-            <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-900 transition-colors">
-              <span>View All</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Markets Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            {markets.map((market) => (
-              <div key={market.id} className="">
-                {/* Market Image */}
-                <div className={`h-52 relative overflow-hidden rounded-lg bg-accent`}>
-                  <div className="absolute inset-0 bg-black/20"></div>
-                  <div className="absolute top-4 left-4 text-white text-xs font-medium bg-black/20 px-2 py-1 rounded-full">
-                    {market.city.split(',')[0]}
-                  </div>
-                </div>
-
-                {/* Market Info */}
-                <div className="py-4">
-                  <div className="mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">{market.city}</h3>
-                    <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-                      <span>Transaction Volume {market.transactionVolume}</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {markets.map((market) => {
+            const [cityName, state] = market.city.split(', ');
+            const gradientClass = market.id === 1 
+              ? "bg-gradient-to-br from-orange-400 to-pink-500"
+              : market.id === 2
+              ? "bg-gradient-to-br from-blue-400 to-cyan-500"
+              : "bg-gradient-to-br from-purple-400 to-indigo-500";
+            
+            return (
+              <Card key={market.id} className="w-full overflow-hidden border-0 shadow-none bg-card/50 dark:bg-transparent backdrop-blur">
+                <div className="p-4">
+                  <div className={`h-48 ${gradientClass} relative rounded-2xl overflow-hidden`}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <h3 className="text-2xl font-bold">{cityName}</h3>
+                      <p className="text-sm opacity-90">{state}</p>
                     </div>
-                    <div className="flex items-center">
-                      <span className="text-xs text-gray-500">{market.marketType}</span>
-                      <div className="ml-2 flex-1">
-                        <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-                          <div 
-                            className={`h-full rounded-full ${
-                              market.marketType === "Buyer's Market" 
-                                ? "bg-teal-500" 
-                                : "bg-gray-400"
-                            }`}
-                            style={{ width: market.marketType === "Buyer's Market" ? "75%" : "50%" }}
-                          ></div>
-                        </div>
+                    <Button 
+                      size="sm" 
+                      className="absolute bottom-4 right-4 rounded-xl bg-white/20 backdrop-blur-md hover:bg-white/30 text-white border-0"
+                    >
+                      View
+                    </Button>
+                  </div>
+                  
+                  <div className="mt-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Price per sqft</p>
+                        <p className="text-2xl font-bold text-foreground">{market.price}</p>
+                      </div>
+                      <Badge className={market.changeType === "negative" ? "bg-red-500/10 text-red-600 hover:bg-red-500/20 border-0" : "bg-green-500/10 text-green-600 hover:bg-green-500/20 border-0"}>
+                        {market.change}
+                      </Badge>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border/50">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Volume</p>
+                        <p className="text-sm font-semibold">{market.transactionVolume}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Type</p>
+                        <p className="text-sm font-semibold">{market.marketType.split(' ')[0]}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Trend</p>
+                        <p className="text-sm font-semibold">{market.changeType === "negative" ? "Down" : "Up"}</p>
                       </div>
                     </div>
                   </div>
-
-                  {/* Price and Change */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-lg font-semibold text-gray-900">{market.price}</span>
-                      <span className="text-sm text-gray-500 ml-1">/ {market.unit}</span>
-                    </div>
-                    <div className={`text-sm font-medium ${
-                      market.changeType === "negative" ? "text-red-500" : "text-green-500"
-                    }`}>
-                      {market.change}
-                    </div>
-                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              </Card>
+            );
+          })}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

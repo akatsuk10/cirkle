@@ -1,61 +1,42 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default function HeroSection() {
   return (
-    <div className="">
-      <div className="mb-4 md:mb-6 px-3 border py-1 w-fit rounded-full bg-[#F9FAFB]">
-        <p className="text-xs md:text-sm text-gray-700 tracking-tight">Over <span className="font-semibold text-black italic">$4.6 Billion</span> in deals closed on Cirkle</p>
-      </div>
+    <div className="space-y-6 md:space-y-8">
+      <Badge variant="secondary" className="px-3 py-1 rounded-full text-xs md:text-sm">
+        Over <span className="font-semibold italic mx-1">$4.6 Billion</span> in deals closed on Cirkle
+      </Badge>
       
-      <h1 className="text-2xl md:text-3xl lg:text-[45px] font-semibold w-full lg:w-[500px] text-gray-900 mb-6 md:mb-8 leading-tight tracking-tight">
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold max-w-lg text-foreground leading-tight tracking-tight">
         Faster, simpler, smarter, real estate.
       </h1>
       
-      {/* Feature List */}
-      <div className="space-y-3 md:space-y-2 mb-8 md:mb-12">
-        <div className="flex items-start space-x-4">
-          <div>
-            <p className="text-sm text-gray-700">
-              <span className="font-semibold italic text-gray-900">Start with $100</span>, not your entire life savings
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-start space-x-4">
-          <div>
-            <p className="text-sm text-gray-700">
-              <span className="font-semibold italic text-gray-900">Not</span> fractional ownership
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-start space-x-4">
-          <div>
-            <p className="text-sm text-gray-700">
-              <span className="font-semibold italic text-gray-900">Market exposure</span> to actual real estate prices
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-start space-x-4">
-          <div>
-            <p className="text-sm text-gray-700">
-              Buy and sell deals <span className="font-semibold italic text-gray-900">in minutes</span>, not months
-            </p>
-          </div>
-        </div>
+      <div className="space-y-2 md:space-y-3">
+        <p className="text-sm md:text-base text-muted-foreground">
+          <span className="font-semibold italic text-foreground">Start with $100</span>, not your entire life savings
+        </p>
+        <p className="text-sm md:text-base text-muted-foreground">
+          <span className="font-semibold italic text-foreground">Not</span> fractional ownership
+        </p>
+        <p className="text-sm md:text-base text-muted-foreground">
+          <span className="font-semibold italic text-foreground">Market exposure</span> to actual real estate prices
+        </p>
+        <p className="text-sm md:text-base text-muted-foreground">
+          Buy and sell deals <span className="font-semibold italic text-foreground">in minutes</span>, not months
+        </p>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <Link href="/cities">
-        <button className="bg-black cursor-pointer text-sm hover:bg-black/80 text-white font-semibold py-3 px-6 rounded-full transition-colors w-full sm:w-auto">
-          View Available Deals
-        </button>
+          <Button size="lg" className="rounded-full w-full sm:w-auto">
+            View Available Deals
+          </Button>
         </Link>
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="text-sm font-semibold text-gray-900">20 Available Now!</span>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+          <span className="text-sm font-semibold text-foreground">20 Available Now!</span>
         </div>
       </div>
     </div>

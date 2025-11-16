@@ -1,87 +1,85 @@
+import { Badge } from "@/components/ui/badge";
+
 export default function Footer() {
     return (
-        <footer className="">
-            <div className="max-w-6xl mx-auto pb-12 px-4 md:px-6">
+        <footer className="w-full border-t border-border bg-background">
+            <div className="max-w-6xl mx-auto py-12 px-4 md:px-6">
                 <div className="flex flex-col md:flex-row justify-between items-start">
-                    {/* Brand Section */}
                     <div className="mb-8 md:mb-4">
                         <div className="mb-2">
-                            <h3 className="text-3xl md:text-4xl font-bold text-gray-900">
-                                Cirkle
+                            <h3 className="text-3xl md:text-4xl font-bold text-foreground">
+                                Cirkle<span className="text-red-500">.</span>
                             </h3>
                         </div>
-                        <p className="text-sm text-gray-600 mb-6">
+                        <p className="text-sm text-muted-foreground mb-6">
                             There is no risk-free trading
                         </p>
                     </div>
 
                     {/* Right-aligned sections wrapper */}
                     <div className="flex flex-col md:flex-row gap-8 md:gap-32 md:justify-end">
-                        {/* About Section */}
                         <div>
-                            <h4 className="text-sm text-gray-900 mb-4">About</h4>
+                            <h4 className="text-sm font-semibold text-foreground mb-4">About</h4>
                             <ul className="space-y-3">
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         Features
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         Pricing
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         Contact
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         Blog
                                     </a>
                                 </li>
                             </ul>
                         </div>
 
-                        {/* Documentation Section */}
                         <div>
-                            <h4 className="text-sm text-gray-900 mb-4">Documentation</h4>
+                            <h4 className="text-sm font-semibold text-foreground mb-4">Documentation</h4>
                             <ul className="space-y-3">
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         Developer Docs
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         FAQ
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         Support
                                     </a>
                                 </li>
                             </ul>
                         </div>
 
-                        {/* Social Section */}
                         <div>
-                            <h4 className="text-sm text-gray-900 mb-4">Social</h4>
+                            <h4 className="text-sm font-semibold text-foreground mb-4">Social</h4>
                             <ul className="space-y-3">
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         X (Twitter)
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         LinkedIn
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                                    <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                         YouTube
                                     </a>
                                 </li>
@@ -90,22 +88,20 @@ export default function Footer() {
                     </div>
                 </div>
 
-                {/* Bottom Section */}
-                <div className="border-gray-200 mt-12 pt-8 flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
-                    {/* Status Indicator */}
-                    <div className="flex items-center space-x-2 border w-fit px-2 py-1 rounded-lg bg-white">
-                        <div className="w-2.5 h-2.5 bg-yellow-200 border rounded-full shadow-xs"></div>
-                        <span className="text-sm text-gray-600">All systems operational</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6">
-                        <p className="text-sm text-gray-500">
+                <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <Badge variant="outline" className="gap-2 rounded-lg text-xs">
+                        <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                        All systems operational
+                    </Badge>
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-6">
+                        <p className="text-sm text-muted-foreground">
                             © 2025 Cirkle. All rights reserved
                         </p>
-                        <div className="flex space-x-4">
-                            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <div className="flex gap-4">
+                            <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                 Privacy Policy
                             </a>
-                            <a href="#" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                            <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                                 Terms of Use
                             </a>
                         </div>

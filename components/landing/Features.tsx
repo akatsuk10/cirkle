@@ -1,183 +1,187 @@
 import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function Features() {
   return (
-    <div className="max-w-[1200px] mx-auto py-16 border-l border-r relative">
-      <div className="overflow-hidden border-y py-8 lg:px-6 relative">
-        {/* Corner decorations */}
-        <div className="absolute -top-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -top-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-        <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-white border flex items-center justify-center z-10"></div>
-
+    <div className="max-w-[1200px] mx-auto py-16 relative">
+      <div className="overflow-hidden py-8 lg:px-6 relative">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 items-stretch">
           {/* Individuals - Free */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
-            <div className="flex-1">
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Individuals</h3>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-gray-900">Free</span>
-                </div>
-                <p className="text-sm text-gray-600">Good for individuals who are just starting out and simply want the essentials.</p>
+          <Card className="flex flex-col h-full">
+            <CardHeader>
+              <CardTitle>Individuals</CardTitle>
+              <div className="mb-4">
+                <span className="text-4xl font-bold">Free</span>
               </div>
-            </div>
+              <CardDescription>Good for individuals who are just starting out and simply want the essentials.</CardDescription>
+            </CardHeader>
             
-            <div className="mt-auto">
-              <button className="w-full bg-[#065F46] text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-[#065F46]/80 transition-colors mb-6">
-                Get started →
-              </button>
-              
+            <CardContent className="flex-1">
               <div className="space-y-3">
-                <p className="text-sm font-semibold text-gray-900 mb-3">Free, forever</p>
+                <p className="text-sm font-semibold mb-3">Free, forever</p>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">1 user</span>
+                  <span className="text-sm text-muted-foreground">1 user</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Unlimited calendars</span>
+                  <span className="text-sm text-muted-foreground">Unlimited calendars</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Unlimited event types</span>
+                  <span className="text-sm text-muted-foreground">Unlimited event types</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Workflows</span>
+                  <span className="text-sm text-muted-foreground">Workflows</span>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+            
+            <CardFooter>
+              <Button className="w-full bg-black hover:bg-black/80 text-white dark:bg-white dark:hover:bg-white/80 dark:text-black">
+                Get started →
+              </Button>
+            </CardFooter>
+          </Card>
 
           {/* Teams - $15 (Featured) */}
-          <div className="bg-gray-900 text-white border border-gray-900 rounded-2xl p-6 relative flex flex-col h-full">
+          <Card className="bg-muted/50 dark:bg-muted border-border flex flex-col h-full relative">
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-[#065F46] text-white text-xs px-3 py-1 rounded-full">14 day free trial</span>
+              <Badge className="bg-black text-white dark:bg-white dark:text-black border-transparent">14 day free trial</Badge>
             </div>
             
-            <div className="flex-1">
-              <div className="mb-6 pt-4">
-                <h3 className="text-lg font-semibold mb-2">Teams</h3>
-                <div className="mb-1">
-                  <span className="text-sm text-gray-300">Starts at</span>
-                </div>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold">$15</span>
-                  <span className="text-sm text-gray-300 ml-1">per month/user</span>
-                </div>
-                <p className="text-sm text-gray-300">Highly recommended for small teams who seek to upgrade their time and perform better as a unit.</p>
+            <CardHeader className="pt-8">
+              <CardTitle>Teams</CardTitle>
+              <div className="mb-1">
+                <span className="text-sm text-muted-foreground">Starts at</span>
               </div>
-            </div>
+              <div className="mb-4">
+                <span className="text-4xl font-bold">$15</span>
+                <span className="text-sm text-muted-foreground ml-1">per month/user</span>
+              </div>
+              <CardDescription>Highly recommended for small teams who seek to upgrade their time and perform better as a unit.</CardDescription>
+            </CardHeader>
             
-            <div className="mt-auto">
-              <button className="w-full bg-[#065F46] text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-[#065F46]/80 transition-colors mb-6">
-                Get started →
-              </button>
-              
+            <CardContent className="flex-1">
               <div className="space-y-3">
                 <p className="text-sm font-semibold mb-3">Free plan features, plus:</p>
                 <div className="flex items-center space-x-2">
-                  <Check className="w-4 h-4 text-green-400" />
-                  <span className="text-sm text-gray-300">1 team</span>
+                  <Check className="w-4 h-4 text-green-600" />
+                  <span className="text-sm text-muted-foreground">1 team</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Check className="w-4 h-4 text-green-400" />
-                  <span className="text-sm text-gray-300">Schedule meetings as a team</span>
+                  <Check className="w-4 h-4 text-green-600" />
+                  <span className="text-sm text-muted-foreground">Schedule meetings as a team</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Check className="w-4 h-4 text-green-400" />
-                  <span className="text-sm text-gray-300">Round-robin, fixed round-robin</span>
+                  <Check className="w-4 h-4 text-green-600" />
+                  <span className="text-sm text-muted-foreground">Round-robin, fixed round-robin</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Check className="w-4 h-4 text-green-400" />
-                  <span className="text-sm text-gray-300">Collective events</span>
+                  <Check className="w-4 h-4 text-green-600" />
+                  <span className="text-sm text-muted-foreground">Collective events</span>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+            
+            <CardFooter>
+              <Button className="w-full bg-black hover:bg-black/80 text-white dark:bg-white dark:hover:bg-white/80 dark:text-black">
+                Get started →
+              </Button>
+            </CardFooter>
+          </Card>
 
           {/* Organizations - $37 */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
-            <div className="flex-1">
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Organizations</h3>
-                <div className="mb-1">
-                  <span className="text-sm text-gray-500">Starts at</span>
-                </div>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-gray-900">$37</span>
-                  <span className="text-sm text-gray-500 ml-1">per month/user</span>
-                </div>
-                <p className="text-sm text-gray-600">Robust scheduling for larger teams looking to have more control, privacy, and security.</p>
+          <Card className="flex flex-col h-full">
+            <CardHeader>
+              <CardTitle>Organizations</CardTitle>
+              <div className="mb-1">
+                <span className="text-sm text-muted-foreground">Starts at</span>
               </div>
-            </div>
+              <div className="mb-4">
+                <span className="text-4xl font-bold">$37</span>
+                <span className="text-sm text-muted-foreground ml-1">per month/user</span>
+              </div>
+              <CardDescription>Robust scheduling for larger teams looking to have more control, privacy, and security.</CardDescription>
+            </CardHeader>
             
-            <div className="mt-auto">
-              <button className="w-full bg-[#065F46] text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-[#065F46]/80 transition-colors mb-6">
-                Get started →
-              </button>
-              
+            <CardContent className="flex-1">
               <div className="space-y-3">
-                <p className="text-sm font-semibold text-gray-900 mb-3">Teams plan features, plus:</p>
+                <p className="text-sm font-semibold mb-3">Teams plan features, plus:</p>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">1 parent team and unlimited sub-teams</span>
+                  <span className="text-sm text-muted-foreground">1 parent team and unlimited sub-teams</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Organization workflows</span>
+                  <span className="text-sm text-muted-foreground">Organization workflows</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Yourcompany.cal.com subdomain</span>
+                  <span className="text-sm text-muted-foreground">Yourcompany.cal.com subdomain</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">SOC2, HIPAA, ISO 27001 compliance check</span>
+                  <span className="text-sm text-muted-foreground">SOC2, HIPAA, ISO 27001 compliance check</span>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+            
+            <CardFooter>
+              <Button className="w-full bg-black hover:bg-black/80 text-white dark:bg-white dark:hover:bg-white/80 dark:text-black">
+                Get started →
+              </Button>
+            </CardFooter>
+          </Card>
 
           {/* Enterprise - Contact us */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col h-full">
-            <div className="flex-1">
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Enterprise</h3>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-gray-900">Contact us</span>
-                </div>
-                <p className="text-sm text-gray-600">The most advanced scheduling and routing solution for large enterprise organizations.</p>
+          <Card className="flex flex-col h-full">
+            <CardHeader>
+              <CardTitle>Enterprise</CardTitle>
+              <div className="mb-4">
+                <span className="text-4xl font-bold">Contact us</span>
               </div>
-            </div>
+              <CardDescription>The most advanced scheduling and routing solution for large enterprise organizations.</CardDescription>
+            </CardHeader>
             
-            <div className="mt-auto">
-              <button className="w-full bg-[#065F46] text-white py-3 px-4 rounded-lg text-sm font-medium hover:bg-[#065F46]/80 transition-colors mb-6">
-                Get a Quote →
-              </button>
-              
+            <CardContent className="flex-1">
               <div className="space-y-3">
-                <p className="text-sm font-semibold text-gray-900 mb-3">Organizations plan features plus:</p>
+                <p className="text-sm font-semibold mb-3">Organizations plan features plus:</p>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Dedicated Database</span>
+                  <span className="text-sm text-muted-foreground">Dedicated Database</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Active directory sync</span>
+                  <span className="text-sm text-muted-foreground">Active directory sync</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Sync your HRIS tools</span>
+                  <span className="text-sm text-muted-foreground">Sync your HRIS tools</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-gray-600">Advanced routing</span>
+                  <span className="text-sm text-muted-foreground">Advanced routing</span>
                 </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+            
+            <CardFooter>
+              <Button className="w-full bg-black hover:bg-black/80 text-white dark:bg-white dark:hover:bg-white/80 dark:text-black">
+                Get a Quote →
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
       </div>
     </div>

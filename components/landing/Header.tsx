@@ -4,10 +4,17 @@ import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const { setVisible } = useWalletModal();
   const { connected, publicKey, disconnect } = useWallet();
 
@@ -20,14 +27,11 @@ export default function Header() {
   const handleConnectWallet = () => {
     if (!connected) {
       setVisible(true);
-    } else {
-      setMenuOpen((prev) => !prev);
     }
   };
 
   const handleDisconnect = async () => {
     await disconnect();
-    setMenuOpen(false);
   };
 
   return (
@@ -35,20 +39,20 @@ export default function Header() {
       <div
         className={`max-w-6xl mx-auto transition-all duration-300 ${
           isScrolled
-            ? "bg-white/90 backdrop-blur-md border rounded-2xl px-4 md:px-6 py-3"
+            ? "bg-background/90 backdrop-blur-md border-border border rounded-2xl px-4 md:px-6 py-3"
             : "px-4 md:px-6 py-3 rounded-2xl"
         }`}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-8">
-            <div className="text-2xl font-semibold tracking-tight text-gray-900">
+            <div className="text-2xl font-semibold tracking-tight text-foreground">
               Cirkle<span className="text-red-500">.</span>
             </div>
             <div className="hidden md:flex items-center space-x-6">
               {["Solutions", "Enterprise", "Developer", "Resources", "Pricing"].map((item) => (
                 <div
                   key={item}
-                  className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 cursor-pointer transition-colors"
+                  className="flex items-center space-x-1 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
                 >
                   <span className="text-sm font-medium">{item}</span>
                   {["Solutions", "Developer", "Resources"].includes(item) && (
@@ -59,27 +63,36 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="relative">
-            <button
-              onClick={handleConnectWallet}
-              className="bg-black text-white cursor-pointer text-sm font-medium px-4 py-2 rounded-full hover:bg-gray-900 transition-colors"
-            >
-              {connected
-                ? `${publicKey?.toBase58().slice(0, 4)}...${publicKey
-                    ?.toBase58()
-                    .slice(-4)}`
-                : "Get Started"}
-            </button>
-
-            {connected && menuOpen && (
-              <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-xl border py-2 w-44">
-                <button
-                  onClick={handleDisconnect}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Disconnect
-                </button>
-              </div>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            {!connected ? (
+              <Button
+                variant="default"
+                size="default"
+                onClick={handleConnectWallet}
+                className="rounded-full"
+              >
+                Get Started
+              </Button>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="default"
+                    size="default"
+                    className="rounded-full"
+                  >
+                    {`${publicKey?.toBase58().slice(0, 4)}...${publicKey
+                      ?.toBase58()
+                      .slice(-4)}`}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleDisconnect}>
+                    Disconnect
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
         </div>

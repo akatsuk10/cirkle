@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 
 export default function FAQ() {
   const faqs = [
@@ -40,46 +41,40 @@ export default function FAQ() {
   ];
 
   return (
-    <div className="max-w-[1200px] mx-auto pt-8 border-l border-r relative">
-      <div className="overflow-hidden py-8 lg:px-6 relative">
+    <section className="w-full border-l border-r border-border">
+      <div className="max-w-[1200px] mx-auto px-4 lg:px-6 py-8 md:py-12">
+        <div className="text-center mb-6 md:mb-8">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-foreground mb-4">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Everything you need to know about investing in real estate through Cirkle. 
+            Can't find the answer you're looking for? Contact our support team.
+          </p>
+        </div>
 
-        <div className="px-4 md:px-6">
-          {/* Header */}
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-3xl font-semibold text-gray-900 mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Everything you need to know about investing in real estate through Cirkle. 
-              Can't find the answer you're looking for? Contact our support team.
-            </p>
-          </div>
+        <div className="max-w-5xl mx-auto">
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq) => (
+              <AccordionItem key={faq.id} value={faq.id}>
+                <AccordionTrigger className="text-left text-foreground hover:text-primary transition-colors">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground leading-relaxed">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
 
-          {/* FAQ Accordion */}
-          <div className="">
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq) => (
-                <AccordionItem key={faq.id} value={faq.id} className="border-gray-200 py-2">
-                  <AccordionTrigger className="text-left text-gray-900 hover:text-[#065F46] transition-colors">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-gray-600 leading-relaxed">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-
-          {/* Contact CTA */}
-          <div className="text-center mt-12">
-            <p className="text-gray-600 mb-4">Still have questions?</p>
-            <button className="bg-black text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-black/80 transition-colors">
-              Contact Support
-            </button>
-          </div>
+        <div className="text-center mt-8">
+          <p className="text-muted-foreground mb-4">Still have questions?</p>
+          <Button size="lg" className="rounded-full">
+            Contact Support
+          </Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

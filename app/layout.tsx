@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { SolanaWalletProvider } from "@/lib/SolanaProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const helvetica = localFont({
   src: [
@@ -49,10 +50,17 @@ export default function RootLayout({
       <body
         className={`${helvetica.variable} antialiased font-helvetica`}
       >
-        <SolanaWalletProvider>
-          {children}
-        </SolanaWalletProvider>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SolanaWalletProvider>
+            {children}
+          </SolanaWalletProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
