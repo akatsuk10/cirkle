@@ -11,6 +11,7 @@ import {
 import { getIPFSGatewayUrl } from "@/lib/ipfs";
 import { Loader2, ArrowLeft, TrendingUp, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { getCity } from "@/lib/solana/oracle/getCity";
 import { useOracleProgram } from "@/lib/solana/oracle/oracle";
 import { buyToken } from "@/lib/solana/cerkle/buy";
@@ -342,10 +343,10 @@ export default function CityPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#065F46] mb-4" />
-          <p className="text-gray-600">Loading {name}...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
+          <p className="text-muted-foreground">Loading {name}...</p>
         </div>
       </div>
     );
@@ -353,29 +354,30 @@ export default function CityPage() {
 
   if (error || !city) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <button
+      <div className="min-h-screen bg-background">
+        <div className="max-w-[1200px] mx-auto px-4 lg:px-6 py-12">
+          <Button
             onClick={() => router.back()}
-            className="inline-flex items-center space-x-2 text-[#065F46] hover:opacity-70 transition mb-8"
+            variant="ghost"
+            className="mb-8"
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back</span>
-          </button>
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back
+          </Button>
 
-          <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
-            <h2 className="text-2xl font-semibold text-red-900 mb-4">
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-8 text-center">
+            <h2 className="text-2xl font-semibold text-foreground mb-4">
               Unable to Load City
             </h2>
-            <p className="text-red-700 mb-6">
+            <p className="text-muted-foreground mb-6">
               {error || `City "${name}" not found`}
             </p>
-            <button
+            <Button
               onClick={() => router.push("/cities")}
-              className="inline-flex items-center space-x-2 bg-[#065F46] text-white px-6 py-2 rounded-full hover:bg-[#065F46]/80 transition"
+              className="bg-black dark:bg-white text-white dark:text-black hover:bg-black/80 dark:hover:bg-white/80 rounded-full"
             >
-              <span>Browse All Cities</span>
-            </button>
+              Browse All Cities
+            </Button>
           </div>
         </div>
       </div>
@@ -383,30 +385,30 @@ export default function CityPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <button
+    <div className="min-h-screen bg-background">
+      <div className="max-w-[1200px] mx-auto px-4 lg:px-6 py-12">
+        <Button
           onClick={() => router.back()}
-          className="inline-flex items-center space-x-2 text-[#065F46] hover:opacity-70 transition mb-8"
+          variant="ghost"
+          className="mb-8"
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back to Markets</span>
-        </button>
+          <ArrowLeft className="w-5 h-5 mr-2" />
+          Back to Markets
+        </Button>
 
         <div className="mb-8">
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h1 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-2">
+              <h1 className="text-4xl md:text-5xl font-semibold text-foreground mb-2">
                 {city.cityName}
               </h1>
-              <p className="text-lg text-gray-600">{city.country}</p>
+              <p className="text-lg text-muted-foreground">{city.country}</p>
             </div>
           </div>
         </div>
 
         {tokenImage && (
-          <div className="mb-12 bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="mb-12 bg-card border border-border rounded-2xl overflow-hidden">
             <div className="relative h-80 w-full overflow-hidden">
               <img
                 src={tokenImage}
@@ -415,10 +417,10 @@ export default function CityPage() {
               />
             </div>
             <div className="p-6">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+              <h2 className="text-2xl font-semibold text-foreground mb-2">
                 {city.cityName} Token
               </h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-muted-foreground text-sm">
                 City-based real estate tokenization
               </p>
             </div>
@@ -426,54 +428,54 @@ export default function CityPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <div className="bg-white border border-gray-200 rounded-xl p-6">
+          <div className="bg-card border border-border rounded-2xl p-6">
             <div className="flex items-center space-x-2 mb-2">
-              <TrendingUp className="w-5 h-5 text-[#065F46]" />
-              <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+              <TrendingUp className="w-5 h-5 text-green-600" />
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                 Market Rate
               </p>
             </div>
-            <p className="text-3xl md:text-4xl font-bold text-[#065F46]">
+            <p className="text-3xl md:text-4xl font-bold text-foreground">
               ${(city.rate/100).toLocaleString()}
             </p>
-            <p className="text-xs text-gray-500 mt-2">per sq.ft</p>
+            <p className="text-xs text-muted-foreground mt-2">per sq.ft</p>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
+          <div className="bg-card border border-border rounded-2xl p-6">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
               Total Population
             </p>
-            <p className="text-3xl md:text-4xl font-bold text-gray-900">
+            <p className="text-3xl md:text-4xl font-bold text-foreground">
               {(city.area).toLocaleString()}
             </p>
-            <p className="text-xs text-gray-500 mt-2">square feet</p>
+            <p className="text-xs text-muted-foreground mt-2">square feet</p>
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-6 mb-12">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-card border border-border rounded-2xl p-6 mb-12">
+          <h2 className="text-lg font-semibold text-foreground mb-4">
             Market Details
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
                 Country
               </p>
-              <p className="text-sm text-gray-900">{city.country}</p>
+              <p className="text-sm text-foreground">{city.country}</p>
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
                 Area
               </p>
-              <p className="text-sm text-gray-900">
+              <p className="text-sm text-foreground">
                 {(city.area).toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
                 Last Updated
               </p>
-              <p className="text-sm text-gray-900">
+              <p className="text-sm text-foreground">
                 {new Date(city.timestamp * 1000).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -485,10 +487,10 @@ export default function CityPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white border border-gray-200 rounded-xl p-6">
+          <div className="bg-card border border-border rounded-2xl p-6">
             <div className="flex items-center space-x-2 mb-4">
               <TrendingUp className="w-5 h-5 text-green-600" />
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-foreground">
                 Buy Tokens
               </h3>
             </div>
@@ -496,22 +498,26 @@ export default function CityPage() {
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-semibold text-gray-700">
+                  <label className="block text-sm font-semibold text-foreground">
                     SOL Amount
                   </label>
                   <div className="flex gap-2">
-                    <button
+                    <Button
                       onClick={() => setSolAmount((userSolBalance / 2).toFixed(4))}
-                      className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition"
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-xs bg-green-500/10 text-green-600 hover:bg-green-500/20"
                     >
                       50%
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => setSolAmount(userSolBalance.toFixed(4))}
-                      className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition"
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-xs bg-green-500/10 text-green-600 hover:bg-green-500/20"
                     >
                       Max
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 <input
@@ -521,29 +527,29 @@ export default function CityPage() {
                   value={solAmount}
                   onChange={(e) => setSolAmount(e.target.value)}
                   placeholder="1.0"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 border border-border bg-background text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
                   <span>Rate: ${(city.rate/100).toLocaleString()} per token</span>
                   <span>Balance: {userSolBalance.toFixed(4)} SOL</span>
                 </div>
               </div>
 
-              <button
+              <Button
                 onClick={handleBuy}
                 disabled={buyLoading || sellLoading || !solAmount}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center space-x-2"
+                className="w-full bg-black hover:bg-black/80 text-white dark:bg-white dark:hover:bg-white/80 dark:text-black"
               >
-                {buyLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                <span>{buyLoading ? "Processing..." : "Buy Tokens"}</span>
-              </button>
+                {buyLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                {buyLoading ? "Processing..." : "Buy Tokens"}
+              </Button>
             </div>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl p-6">
+          <div className="bg-card border border-border rounded-2xl p-6">
             <div className="flex items-center space-x-2 mb-4">
               <TrendingDown className="w-5 h-5 text-red-600" />
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-foreground">
                 Sell Tokens
               </h3>
             </div>
@@ -551,22 +557,26 @@ export default function CityPage() {
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-semibold text-gray-700">
+                  <label className="block text-sm font-semibold text-foreground">
                     Token Amount
                   </label>
                   <div className="flex gap-2">
-                    <button
+                    <Button
                       onClick={() => setSellAmount((userTokenBalance / 2).toFixed(6))}
-                      className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition"
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-xs bg-red-500/10 text-red-600 hover:bg-red-500/20"
                     >
                       50%
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => setSellAmount(userTokenBalance.toFixed(6))}
-                      className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition"
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-xs bg-red-500/10 text-red-600 hover:bg-red-500/20"
                     >
                       Max
-                    </button>
+                    </Button>
                   </div>
                 </div>
                 <input
@@ -576,19 +586,19 @@ export default function CityPage() {
                   value={sellAmount}
                   onChange={(e) => setSellAmount(e.target.value)}
                   placeholder="1"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="w-full px-4 py-2 border border-border bg-background text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
-                <p className="text-xs text-gray-500 mt-1">You own: {userTokenBalance.toFixed(6)} tokens</p>
+                <p className="text-xs text-muted-foreground mt-1">You own: {userTokenBalance.toFixed(6)} tokens</p>
               </div>
 
-              <button
+              <Button
                 onClick={handleSell}
                 disabled={sellLoading || buyLoading || !sellAmount}
-                className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center space-x-2"
+                className="w-full bg-black hover:bg-black/80 text-white dark:bg-white dark:hover:bg-white/80 dark:text-black"
               >
-                {sellLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                <span>{sellLoading ? "Processing..." : "Sell Tokens"}</span>
-              </button>
+                {sellLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                {sellLoading ? "Processing..." : "Sell Tokens"}
+              </Button>
             </div>
           </div>
         </div>
