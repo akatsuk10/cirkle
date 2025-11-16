@@ -2,17 +2,9 @@ import { PublicKey } from "@solana/web3.js";
 import type { Program } from "@coral-xyz/anchor";
 import type { Contract } from "@/idl/oracle";
 
-export interface CityInfo {
-  cityName: string;
-  rate: number;
-  timestamp: number;
-  country: string;
-  area: number;
-}
-
 export async function getCityList(
   program: Program<Contract>
-): Promise<CityInfo[] | null> {
+) {
   if (!program) return null;
 
   try {
@@ -21,14 +13,9 @@ export async function getCityList(
       program.programId
     )[0];
 
-    const cities = await program.methods
-      .getCityList()
-      .accounts({
-        oracleState: oraclePda,
-      })
-      .view();
+    const acc = await program.account.oracleState.fetch(oraclePda);
 
-    return cities.map((c: any) => ({
+    return acc.circleRates.map((c: any) => ({
       cityName: c.cityName,
       rate: Number(c.rate),
       timestamp: Number(c.timestamp),
